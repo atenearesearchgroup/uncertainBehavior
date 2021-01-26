@@ -1,0 +1,44 @@
+reset
+
+!new TraceStorageMaster('tm');
+!new Clock('clock');
+!new SimulationParameters('sp');
+
+!new Tank('t10');
+!t10.name := 't10';
+!t10.team := 1;
+!t10.initialize(clock, sp, tm);
+
+!new Tank('t11');
+!t11.name := 't11';
+!t11.team := 1;
+!t11.initialize(clock, sp, tm);
+
+!new Tank('t00');
+!t00.name := 't00';
+!t00.team := 0;
+!t00.initialize(clock, sp, tm);
+
+!new Tank('t01');
+!t01.name := 't01';
+!t01.team := 0;
+!t01.initialize(clock, sp, tm);
+
+!t10.xPos := UReal(10.0, 0.001);
+!t10.yPos := UReal(10.0, 0.001);
+
+!t11.xPos := UReal(1.0, 0.001);
+!t11.yPos := UReal(1.0, 0.001);
+
+!t00.xPos := UReal(5.0, 0.001);
+!t00.yPos := UReal(5.0, 0.001);
+
+!t01.xPos := UReal(2.0, 0.001);
+!t01.yPos := UReal(2.0, 0.001);
+
+!t00.behaviour.boldMood := 1.0;
+!t01.behaviour.boldMood := 1.0;
+!t10.behaviour.boldMood := 1.0;
+!t11.behaviour.boldMood := 1.0;
+
+check

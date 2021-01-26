@@ -1,0 +1,1293 @@
+model CrossWalk
+
+-- Version May 1, 2020. Changes:
+-- agents are created with random values of vision radius, reaction time, and length.
+-- percentages of pedestrians with doubles or triple lengths included as attributes of class SimulationObserver
+-- added 2 new parameters to the simulation observer runSimulation to account for these two new values
+-- added a factor in the calculation of the speed, that forces the car to move farther when the road grip is bad
+-- removed transient comments from previous versions
+-- 
+-- previous version: 06CrossWalk-2020-04-30.use
+
+
+enum Action {Move, Accelerate, Decelerate, HardBreak}
+
+abstract class Agent < ActiveObject, PositionedElement
+    attributes
+        length : UReal
+        width : UReal
+        collisionRadius : UReal             
+        nearCollisionRadius : UReal         derive : (self.currentSpeed()*self.reactionTime).max(self.collisionRadius*2)
+        visionRadius : UReal
+       
+        speed : UReal                       
+        maxSpeed : UReal
+        slowSpeed : UReal
+        currentSpeed : UReal derive: self.currentSpeed()
+        
+        afterDP : UBoolean derive: self.afterDetentionPoint()
+
+        reactionTime : Real
+        nextReaction : Real init : 0.0
+
+        distToAgent : UReal                 init: UReal(0.0, 0.0)
+        outSimulation : Boolean             init: false
+ 
+        decisionValues: Tuple(move: Real,acc: Real,deac: Real,hb: Real) init : Tuple{move = 0.0, acc = 0.0, deac = 0.0, hb = 0.0}
+        situationalContext: Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real) init: Tuple{a1 = 0.0, a2 = 0.0, a3 = 0.0, a4 = 0.0, a5 = 0.0, a6 = 0.0}
+
+    operations
+        initialize(r : Road, c : Clock, sm : SimulationParameters, cm : CollisionMonitor) begin end
+
+        initializeBehaviour() begin end
+        
+        action() 
+            begin
+                 declare a: Agent;
+                a := Agent.allInstances() -> excluding(self) -> any(true);
+                if a<>null then 
+                    self.distToAgent := self.distance(a);
+                end;
+                self.makeADecision(); 
+            end
+        move()
+            begin
+                declare sp: UReal;
+                sp := self.currentSpeed(); -- in m/s
+                if not(self.outSimulation) then
+                    if self.road.oclIsTypeOf(CarRoad) then
+                        self.x := self.x + sp*self.clock.betweenTickLapse; 
+
+                        -- it waits for cars to completely leave the scene 
+                        if (self.x+self.length >= self.road.endRoad).confidence() >= self.dash.truthThreshold then
+                            self.outSimulation := true;
+                        end;
+                    else 
+                        -- it waits for pedestrians to completely leave the scene
+                        self.y := self.y + sp*self.clock.betweenTickLapse; 
+                        if ((self.y+self.length) >= self.road.endRoad).confidence() >= self.dash.truthThreshold then
+                            self.outSimulation := true;
+                        end;
+                    end;
+                end;
+            end
+        accelerate() 
+            begin
+                if(self.speed < self.slowSpeed).confidence() >= self.dash.truthThreshold then
+                    self.speed := self.slowSpeed;
+                else if(self.speed <= self.maxSpeed).confidence() >= self.dash.truthThreshold then
+                    self.speed := self.maxSpeed; 
+                    end
+                end;
+                self.move();
+            end
+        
+         decelerate() 
+            begin
+                if(self.speed > self.slowSpeed).confidence() >= self.dash.truthThreshold then
+                    self.speed := self.speed/2;
+                    self.move();
+                    self.speed := self.slowSpeed;
+                else 
+                    self.speed := UReal(0.0, self.dash.precision); 
+                    self.move();
+                end;
+            end
+
+        stop()
+            begin
+                self.speed := UReal(0.0, self.dash.precision);
+            end
+
+        distance(a: Agent) : UReal
+            = let paramSelf : Tuple(x : UReal, y : UReal, xb : UReal, yb : UReal) = self.distanceParameters() in
+            let paramA : Tuple(x : UReal, y : UReal, xb : UReal, yb : UReal) = a.distanceParameters() in
+            let left : UBoolean = paramA.xb < paramSelf.x in
+            let right : UBoolean = paramSelf.xb < paramA.x in 
+            let bottom : UBoolean = paramA.yb < paramSelf.y in
+            let top : UBoolean = paramSelf.yb < paramA.y in
+            if (top and left).confidence() >= self.dash.truthThreshold then
+                        ((paramSelf.x - paramA.xb)*(paramSelf.x - paramA.xb)
+                                + (paramSelf.yb - paramA.y)*(paramSelf.yb - paramA.y)).sqrt()
+            else if (bottom and left).confidence() >= self.dash.truthThreshold then
+                        ((paramSelf.x - paramA.xb)*(paramSelf.x - paramA.xb)
+                                + (paramSelf.y - paramA.yb)*(paramSelf.y - paramA.yb)).sqrt()
+                        else if (bottom and right).confidence() >= self.dash.truthThreshold then
+                            ((paramSelf.xb - paramA.x)*(paramSelf.xb - paramA.x)
+                                    + (paramSelf.y - paramA.yb)*(paramSelf.y - paramA.yb)).sqrt()
+                            else if (top and right).confidence() >= self.dash.truthThreshold then
+                                ((paramSelf.xb - paramA.x)*(paramSelf.xb - paramA.x)
+                                        + (paramSelf.yb - paramA.y)*(paramSelf.yb - paramA.y)).sqrt()
+                                else if left.confidence() >= self.dash.truthThreshold then
+                                    paramSelf.x - paramA.xb
+                                    else if right.confidence() >= self.dash.truthThreshold then
+                                        paramA.x - paramSelf.xb
+                                        else if bottom.confidence() >= self.dash.truthThreshold then
+                                            paramSelf.y - paramA.yb
+                                            else if top.confidence() >= self.dash.truthThreshold then
+                                                paramA.y - paramSelf.yb
+                                            else
+                                                UReal(0.0, self.dash.precision)
+                                            endif
+                                        endif
+                                    endif
+                                endif
+                            endif
+                        endif
+                    endif
+                endif
+
+        distanceParameters(): Tuple(x : UReal, y : UReal, xb : UReal, yb : UReal)
+            = Tuple {
+                x = if self.road.oclIsTypeOf(CarRoad) then self.x - self.length else self.x - self.width/2 endif,
+                y = if self.road.oclIsTypeOf(CarRoad) then self.y - self.width/2 else self.y - self.length endif,
+                xb = if self.road.oclIsTypeOf(CarRoad) then self.x else self.x + self.width/2 endif,
+                yb = if self.road.oclIsTypeOf(CarRoad) then self.y + self.width/2 else self.y endif
+            }
+        
+        canSee(a: Agent): UBoolean
+            =  let dist : UReal = self.distance(a) in
+                let vR : UReal = self.currentVisionRadius() in
+                let visibility : Real = self.road.intersection.visibility() in
+                dist <= vR
+     
+        nearCollision(a: Agent): UBoolean = self.distance(a) < (self.nearCollisionRadius).max(a.nearCollisionRadius)
+
+        collision(a: Agent): UBoolean = self.distance(a) <= self.collisionRadius
+
+        nextNearCollision(a: Agent): UBoolean = 
+            let dist : UReal = self.distance(a) in
+            let sp : UReal = self.currentSpeed() in
+            (dist + sp*self.clock.betweenTickLapse) < self.nearCollisionRadius
+
+        nextCollision(a: Agent): UBoolean =
+            let dist : UReal = self.distance(a) in
+            let sp : UReal = self.currentSpeed() in
+            (dist + sp*self.clock.betweenTickLapse) <= self.collisionRadius
+
+        afterDetentionPoint(): UBoolean 
+            = if self.road.oclIsTypeOf(CarRoad) then self.x > self.road.detentionPoint
+            else self.y > self.road.detentionPoint
+            endif
+    
+        makeADecision() -- new version
+            begin
+                declare slow : UBoolean, 
+                        cruising : UBoolean, 
+                        stopped : UBoolean, 
+                        sitContextValues : Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real),
+                        decision: Tuple(move: Real, acc: Real, deac: Real, hb: Real),
+                        maximo: Real;
+               if not(self.outSimulation) then
+                    if self.clock.now <= 0.2 or (self.clock.now >= (self.nextReaction - 0.01)) then -- 0.01 needed to avoid Real resolution
+                        self.nextReaction := self.clock.now;
+                        maximo := (self.decisionValues.move).max(self.decisionValues.acc).max(self.decisionValues.deac).max(self.decisionValues.hb);
+                        if self.decisionValues.move = maximo then 
+                            self.move();
+                            self.trace.recordAction(Action: :Move);
+                        else if self.decisionValues.acc = maximo then 
+                                self.accelerate();
+                                self.trace.recordAction(Action: :Accelerate);
+                            else if self.decisionValues.deac = maximo then 
+                                    self.decelerate();
+                                    self.trace.recordAction(Action: :Decelerate);
+                                else
+                                    self.stop();
+                                    self.trace.recordAction(Action: :HardBreak);
+                                end;
+                            end;
+                        end;
+                        
+                        stopped := self.speed = UReal(0.0, self.dash.precision);
+                        cruising := self.speed > self.slowSpeed;
+                        slow := not (stopped or cruising); --self.speed <= self.slowSpeed and self.speed > UReal(0.0, self.dash.precision);
+                        
+                        sitContextValues := self.behaviour.situationalContextValues();
+
+                        maximo := slow.confidence().max(cruising.confidence()).max(stopped.confidence());
+
+                        if slow.confidence() = maximo then -- slow.confidence() > cruising.confidence() and slow.confidence() > stopped.confidence() then
+                            decision := self.behaviour.behaviourSlow(sitContextValues.a1, sitContextValues.a2, sitContextValues.a3
+                            , sitContextValues.a4, sitContextValues.a5, sitContextValues.a6)
+                        else if cruising.confidence() = maximo then -- cruising.confidence() > slow.confidence() and cruising.confidence() > stopped.confidence() then
+                                decision := self.behaviour.behaviourCruising(sitContextValues.a1, sitContextValues.a2, sitContextValues.a3
+                                , sitContextValues.a4, sitContextValues.a5, sitContextValues.a6)
+                            else
+                                decision := self.behaviour.behaviourStopped(sitContextValues.a1, sitContextValues.a2, sitContextValues.a3
+                                , sitContextValues.a4, sitContextValues.a5, sitContextValues.a6)
+                            end;
+                        end;
+
+                        self.decisionValues := decision;
+                        
+                        self.situationalContext := sitContextValues;
+
+                        self.trace.record(self.clock.now, self.x, self.y, self.currentSpeed(), sitContextValues, decision);
+                        
+                        maximo := (decision.move).max(decision.acc).max(decision.deac).max(decision.hb);
+                        if decision.move<>maximo then 
+                            self.nextReaction := ((self.clock.now+self.reactionTime)*10).floor()/10;
+                        end;
+                   else
+                        self.move();
+                    end;
+                end;
+            end
+
+        currentSpeed() : UReal
+            = let grip : Real = self.road.intersection.grip() in
+              let visibility : Real = self.road.intersection.visibility() in
+              let factor : Real = (1 + self.dash.speedVisibilityFactor*(1-visibility)  -- visibility in increases speed 
+                                     + self.dash.speedGripFactor*(1-grip)) in  --when grip is bad, it moves farther!
+
+              self.speed * factor * self.dash.speedPeakFactor
+
+
+        currentVisionRadius() : UReal
+            = let visibility : Real = self.road.intersection.visibility() in
+                let factor : Real = (1 - self.dash.vRadiusVisibilityFactor*(1-visibility)) in
+              self.visionRadius * factor              
+
+
+    constraints
+        inv correctSpeedValues: (self.slowSpeed < self.maxSpeed).confidence() >= self.dash.truthThreshold
+        inv correctRadiusValues: (self.nearCollisionRadius > self.collisionRadius).confidence() >= self.dash.truthThreshold
+    end
+
+class Behaviour
+    attributes
+        recklessMood: Real                       init: 0.0
+        distractedMood: Real                     init: 0.0
+        attentiveMood: Real                      derive: 1-(recklessMood+distractedMood)
+        situationalContextWeight: Real           derive: if (recklessMood>0.5) then 0 
+                                                        else if (attentiveMood>0.5) then 1 
+                                                             else 0.5
+                                                             endif 
+                                                        endif
+        motivationalForceWeight: Real            derive: 1.0-self.situationalContextWeight
+    operations
+        initialize()
+            begin
+                declare mft : MotivationalForceTables, sct : SituationalContextTables;
+                
+                mft := new MotivationalForceTables();
+                insert(mft, self) into MotForceTable;
+
+                sct := new SituationalContextTables();
+                insert(sct, self) into SitContextTable;
+            end
+
+        situationalContextValues(): Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real)
+            begin
+                declare res1 : UBoolean, 
+                        res2 : UBoolean, 
+                        res3 : UBoolean, 
+                        res4 : UBoolean, 
+                        res5 : UBoolean, 
+                        res6 : UBoolean,
+                        tmp : UBoolean, 
+                        otherAgent : Agent;
+
+                ---------- A1 - No agent in vision radius ----------
+                if not(Agent.allInstances -> excluding(self.agent) -> isEmpty()) then
+                    res1 := UBoolean(true, 0.0);
+                    for a in Agent.allInstances -> excluding(self.agent) do 
+                        tmp := self.agent.canSee(a);
+                        res1 := res1 or not(tmp);
+                    end;
+                else
+                    res1 := UBoolean(true, 1);
+                end;
+
+                if not(Agent.allInstances -> excluding(self.agent) -> isEmpty()) then
+                    ---------- A6 - Self is in nearCollision with another Agent  ----------
+                    res6 := UBoolean(true,0.0);
+                    for a in Agent.allInstances -> excluding(self.agent) do
+                        tmp := self.agent.nextNearCollision(a);
+                        res6 := res6 or tmp;
+                    end;
+
+                    ---------- A2 - Self before DP, otherAgent in non parallel road before DP ----------
+                    res2 := self.calculateSituationalContext(false, false);
+                    res2 := res2 and not(res6);
+
+                    ---------- A3 - Self after DP, otherAgent in non parallel road before DP ----------
+                    res3 := self.calculateSituationalContext(true, false);
+                    res3 := res3 and not(res6);
+
+                    ---------- A4 - Self before DP, otherAgent in non parallel road after DP ----------
+                    res4 := self.calculateSituationalContext(false, true);
+                    res4 := res4 and not(res6);
+
+                    ---------- A5 - Self after DP, otherAgent in non parallel road after DP ----------
+                    res5 := self.calculateSituationalContext(true, true);
+                    res5 := res5 and not(res6);
+                    
+                else
+                    res2 := UBoolean(true, 0);
+                    res3 := UBoolean(true, 0);
+                    res4 := UBoolean(true, 0);
+                    res5 := UBoolean(true, 0);
+                    res6 := UBoolean(true, 0);
+                end;  
+                
+                result := Tuple{
+                    a1 = res1.confidence(),
+                    a2 = res2.confidence(),
+                    a3 = res3.confidence(),
+                    a4 = res4.confidence(),
+                    a5 = res5.confidence(),
+                    a6 = res6.confidence()
+                };
+            end
+
+        calculateSituationalContext(afterDPSelf : Boolean, afterDPOtherAgent : Boolean) : UBoolean
+            begin
+                declare res : UBoolean, res2 : UBoolean, tmp: UBoolean;
+                -- Self regarding DP
+                res := self.agent.afterDetentionPoint();
+                if not afterDPSelf then
+                    res := not(res);
+                end;
+
+                -- Other agents regarding DP - We look for maximum value
+                res2 := UBoolean(true, 0);
+
+                for a in Agent.allInstances -> excluding(self.agent) do
+                    tmp := a.afterDetentionPoint();
+                    if not(afterDPOtherAgent) then
+                        tmp := not(tmp);
+                    end;
+
+                    -- Only agents in vision radius
+                    tmp := tmp and self.agent.canSee(a);
+
+                    if res2.confidence() < tmp.confidence() then
+                        res2 := tmp;
+                    end;
+                end;
+
+                result := res and res2;
+            end
+
+        behaviourCruising(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real): Tuple(move: Real, acc: Real, deac: Real, hb: Real) =
+        Tuple{
+            move = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.cruising.a1.move+
+                                        a2*self.sc.decisionTable.cruising.a2.move+
+                                        a3*self.sc.decisionTable.cruising.a3.move+
+                                        a4*self.sc.decisionTable.cruising.a4.move+
+                                        a5*self.sc.decisionTable.cruising.a5.move+
+                                        a6*self.sc.decisionTable.cruising.a6.move)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.cruising.aggressive.move+
+                                distractedMood*self.mf.motivationTable.cruising.distracted.move+
+                                attentiveMood*self.mf.motivationTable.cruising.attentive.move),
+
+            acc = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.cruising.a1.acc+
+                                        a2*self.sc.decisionTable.cruising.a2.acc+
+                                        a3*self.sc.decisionTable.cruising.a3.acc+
+                                        a4*self.sc.decisionTable.cruising.a4.acc+
+                                        a5*self.sc.decisionTable.cruising.a5.acc+
+                                        a6*self.sc.decisionTable.cruising.a6.acc)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.cruising.aggressive.acc+
+                                distractedMood*self.mf.motivationTable.cruising.distracted.acc+
+                                attentiveMood*self.mf.motivationTable.cruising.attentive.acc),
+
+            deac = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.cruising.a1.deac+
+                                        a2*self.sc.decisionTable.cruising.a2.deac+
+                                        a3*self.sc.decisionTable.cruising.a3.deac+
+                                        a4*self.sc.decisionTable.cruising.a4.deac+
+                                        a5*self.sc.decisionTable.cruising.a5.deac+
+                                        a6*self.sc.decisionTable.cruising.a6.deac)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.cruising.aggressive.deac+
+                                distractedMood*self.mf.motivationTable.cruising.distracted.deac+
+                                attentiveMood*self.mf.motivationTable.cruising.attentive.deac),
+
+            hb = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.cruising.a1.hb+
+                                        a2*self.sc.decisionTable.cruising.a2.hb+
+                                        a3*self.sc.decisionTable.cruising.a3.hb+
+                                        a4*self.sc.decisionTable.cruising.a4.hb+
+                                        a5*self.sc.decisionTable.cruising.a5.hb+
+                                        a6*self.sc.decisionTable.cruising.a6.hb)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.cruising.aggressive.hb+
+                                distractedMood*self.mf.motivationTable.cruising.distracted.hb+
+                                attentiveMood*self.mf.motivationTable.cruising.attentive.hb)
+        }
+        behaviourSlow(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real): Tuple(move: Real,acc: Real,deac: Real,hb: Real) =
+        Tuple{
+            move = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.slow.a1.move+
+                                        a2*self.sc.decisionTable.slow.a2.move+
+                                        a3*self.sc.decisionTable.slow.a3.move+
+                                        a4*self.sc.decisionTable.slow.a4.move+
+                                        a5*self.sc.decisionTable.slow.a5.move+
+                                        a6*self.sc.decisionTable.slow.a6.move)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.slow.aggressive.move+
+                                distractedMood*self.mf.motivationTable.slow.distracted.move+
+                                attentiveMood*self.mf.motivationTable.slow.attentive.move),
+
+            acc = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.slow.a1.acc+
+                                        a2*self.sc.decisionTable.slow.a2.acc+
+                                        a3*self.sc.decisionTable.slow.a3.acc+
+                                        a4*self.sc.decisionTable.slow.a4.acc+
+                                        a5*self.sc.decisionTable.slow.a5.acc+
+                                        a6*self.sc.decisionTable.slow.a6.acc)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.slow.aggressive.acc+
+                                distractedMood*self.mf.motivationTable.slow.distracted.acc+
+                                attentiveMood*self.mf.motivationTable.slow.attentive.acc),
+
+            deac = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.slow.a1.deac+
+                                        a2*self.sc.decisionTable.slow.a2.deac+
+                                        a3*self.sc.decisionTable.slow.a3.deac+
+                                        a4*self.sc.decisionTable.slow.a4.deac+
+                                        a5*self.sc.decisionTable.slow.a5.deac+
+                                        a6*self.sc.decisionTable.slow.a6.deac)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.slow.aggressive.deac+
+                                distractedMood*self.mf.motivationTable.slow.distracted.deac+
+                                attentiveMood*self.mf.motivationTable.slow.attentive.deac),
+
+            hb = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.slow.a1.hb+
+                                        a2*self.sc.decisionTable.slow.a2.hb+
+                                        a3*self.sc.decisionTable.slow.a3.hb+
+                                        a4*self.sc.decisionTable.slow.a4.hb+
+                                        a5*self.sc.decisionTable.slow.a5.hb+
+                                        a6*self.sc.decisionTable.slow.a6.hb)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.slow.aggressive.hb+
+                                distractedMood*self.mf.motivationTable.slow.distracted.hb+
+                                attentiveMood*self.mf.motivationTable.slow.attentive.hb)
+        }
+        behaviourStopped(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real): Tuple(move: Real,acc: Real,deac: Real,hb: Real) =
+        Tuple{
+            move = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.stopped.a1.move+
+                                        a2*self.sc.decisionTable.stopped.a2.move+
+                                        a3*self.sc.decisionTable.stopped.a3.move+
+                                        a4*self.sc.decisionTable.stopped.a4.move+
+                                        a5*self.sc.decisionTable.stopped.a5.move+
+                                        a6*self.sc.decisionTable.stopped.a6.move)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.stopped.aggressive.move+
+                                distractedMood*self.mf.motivationTable.stopped.distracted.move+
+                                attentiveMood*self.mf.motivationTable.stopped.attentive.move),
+
+            acc = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.stopped.a1.acc+
+                                        a2*self.sc.decisionTable.stopped.a2.acc+
+                                        a3*self.sc.decisionTable.stopped.a3.acc+
+                                        a4*self.sc.decisionTable.stopped.a4.acc+
+                                        a5*self.sc.decisionTable.stopped.a5.acc+
+                                        a6*self.sc.decisionTable.stopped.a6.acc)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.stopped.aggressive.acc+
+                                distractedMood*self.mf.motivationTable.stopped.distracted.acc+
+                                attentiveMood*self.mf.motivationTable.stopped.attentive.acc),
+
+            deac = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.stopped.a1.deac+
+                                        a2*self.sc.decisionTable.stopped.a2.deac+
+                                        a3*self.sc.decisionTable.stopped.a3.deac+
+                                        a4*self.sc.decisionTable.stopped.a4.deac+
+                                        a5*self.sc.decisionTable.stopped.a5.deac+
+                                        a6*self.sc.decisionTable.stopped.a6.deac)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.stopped.aggressive.deac+
+                                distractedMood*self.mf.motivationTable.stopped.distracted.deac+
+                                attentiveMood*self.mf.motivationTable.stopped.attentive.deac),
+
+            hb = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.stopped.a1.hb+
+                                        a2*self.sc.decisionTable.stopped.a2.hb+
+                                        a3*self.sc.decisionTable.stopped.a3.hb+
+                                        a4*self.sc.decisionTable.stopped.a4.hb+
+                                        a5*self.sc.decisionTable.stopped.a5.hb+
+                                        a6*self.sc.decisionTable.stopped.a6.hb)+
+                    motivationalForceWeight*(recklessMood*self.mf.motivationTable.stopped.aggressive.hb+
+                                distractedMood*self.mf.motivationTable.stopped.distracted.hb+
+                                attentiveMood*self.mf.motivationTable.stopped.attentive.hb)
+        }
+    end
+
+class SituationalContextTables
+    attributes
+        decisionTable: Tuple(
+                            cruising: Tuple(
+                                    a1: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a2: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a3: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a4: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a5: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a6: Tuple(move: Real,acc: Real,deac: Real,hb: Real)),
+                            slow: Tuple(
+                                    a1: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a2: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a3: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a4: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a5: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a6: Tuple(move: Real,acc: Real,deac: Real,hb: Real)),
+                            stopped: Tuple(
+                                    a1: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a2: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a3: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a4: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a5: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                                    a6: Tuple(move: Real,acc: Real,deac: Real,hb: Real))
+                        )
+    end
+
+class MotivationalForceTables
+    attributes
+        motivationTable : Tuple(
+            cruising: Tuple(
+                        aggressive: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                        distracted: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                        attentive: Tuple(move: Real,acc: Real,deac: Real,hb: Real)),
+            slow: Tuple(
+                        aggressive: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                        distracted: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                        attentive: Tuple(move: Real,acc: Real,deac: Real,hb: Real)),
+            stopped: Tuple(
+                        aggressive: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                        distracted: Tuple(move: Real,acc: Real,deac: Real,hb: Real),
+                        attentive: Tuple(move: Real,acc: Real,deac: Real,hb: Real)))
+    end
+
+class Car < Agent
+    operations
+        initialize(r : Road, c : Clock, sm : SimulationParameters, cm : CollisionMonitor)
+            begin
+                declare t : TraceStorage, b : Behaviour;
+
+                t := new TraceStorage();
+                insert(self, t) into Movements;
+                
+                b := new Behaviour();
+                b.initialize();
+                insert(self, b) into AgentBehaviour;
+                self.initializeBehaviour();
+
+                insert(r, self) into Path;
+                insert(c, self) into Timing;
+                insert(sm, self) into DashPositioned;
+                insert(self, cm) into CollisionMonitoring;
+                
+                self.x :=                   r.beginRoad;
+                self.y :=                   UReal(0.0, self.dash.precision);
+                self.length :=              UReal(4.0, self.dash.precision);
+                self.width :=               UReal(1.8, self.dash.precision);
+                self.collisionRadius :=     UReal(0.5, self.dash.precision); 
+                self.visionRadius :=        UReal(30.0, self.dash.precision);
+                self.maxSpeed :=            UReal(5.0, self.dash.precision);  -- xxx 5.56
+                self.slowSpeed :=           UReal(2.1, self.dash.precision);  -- xxx 2.5
+                self.reactionTime :=        0.5;
+                self.speed :=               self.maxSpeed;
+            end
+
+        initializeBehaviour()
+            begin
+                self.behaviour.sc.decisionTable := Tuple{cruising = Tuple{
+                                                    a1 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},
+                                                    a2 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0}, 
+                                                    a3 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},	
+                                                    a4 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0},
+                                                    a5 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0}, -- XXX: moved from hb to deac
+                                                    a6 = Tuple{move = 0.0,acc = 0.0,deac = 0.0,hb = 1.0}},	
+                                    slow = Tuple{   
+                                                    a1 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},
+                                                    a2 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},	
+                                                    a3 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},	
+                                                    a4 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0},
+                                                    a5 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0}, -- XXX: moved from 0,0,0.3,0.7
+                                                    a6 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0}},-- XXX: moved from hb to deac 
+                                    stopped = Tuple{
+                                                    a1 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},
+                                                    a2 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},	
+                                                    a3 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},	
+                                                    a4 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},
+                                                    a5 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},
+                                                    a6 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0}}
+                                    };
+                self.behaviour.mf.motivationTable := Tuple{cruising = Tuple{ 
+                                        aggressive = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},
+                                        distracted = Tuple{move = 0.75,acc = 0.0,deac = 0.25,hb = 0.0},	
+                                        attentive = Tuple{move = 0.5,acc = 0.0,deac = 0.5,hb = 0.0}},	
+                            slow = Tuple{
+                                        aggressive = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},
+                                        distracted = Tuple{move = 0.2,acc = 0.8,deac = 0.0,hb = 0.0},	
+                                        attentive = Tuple{move = 0.5,acc = 0.5,deac = 0.0,hb = 0.0}},	
+                            stopped = Tuple{
+                                        aggressive = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},
+                                        distracted = Tuple{move = 0.5,acc = 0.5,deac = 0.0,hb = 0.0},	
+                                        attentive = Tuple{move = 0.1,acc = 0.9,deac = 0.0,hb = 0.0}}};
+            end
+        end
+
+class Pedestrian < Agent
+    operations
+        initialize(r : Road, c : Clock, sm : SimulationParameters, cm : CollisionMonitor)
+            begin
+                declare t : TraceStorage, b : Behaviour;
+
+                t := new TraceStorage();
+                insert(self, t) into Movements;
+                
+                b := new Behaviour();
+                b.initialize();
+                insert(self, b) into AgentBehaviour;
+                self.initializeBehaviour();
+
+                insert(r,self) into Path;
+                insert(c, self) into Timing;
+                insert(sm, self) into DashPositioned;
+                insert(self, cm) into CollisionMonitoring;
+
+                self.x :=                   UReal(0.0, self.dash.precision);
+                self.y :=                   r.beginRoad;
+                self.length :=              UReal(0.5, self.dash.precision); -- XXX 0.5
+                self.width :=               UReal(0.5, self.dash.precision);
+                self.collisionRadius :=     UReal(0.5, self.dash.precision); -- XXX 0.5
+                self.visionRadius :=        UReal(30.0, self.dash.precision);
+                self.maxSpeed :=            UReal(1.0, self.dash.precision); -- XXX 1.25
+                self.slowSpeed :=           UReal(0.7, self.dash.precision);
+                self.reactionTime :=        0.7;
+                self.speed :=               self.maxSpeed;
+            end
+        initializeBehaviour() 
+            begin
+                self.behaviour.sc.decisionTable := Tuple{cruising = Tuple{
+                                                    a1 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},
+                                                    a2 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},	
+                                                    a3 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},	
+                                                    a4 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0},
+                                                    a5 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},
+                                                    a6 = Tuple{move = 0.0,acc = 0.0,deac = 0.0,hb = 1.0}},
+                                    slow = Tuple{   
+                                                    a1 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},
+                                                    a2 = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},	
+                                                    a3 = Tuple{move = 0.2,acc = 0.8,deac = 0.0,hb = 0.0},	
+                                                    a4 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0},
+                                                    a5 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0},
+                                                    a6 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0}}, -- XXX from move to deac	
+                                    stopped = Tuple{
+                                                    a1 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},
+                                                    a2 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},	
+                                                    a3 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},	
+                                                    a4 = Tuple{move = 0.0,acc = 0.0,deac = 1.0,hb = 0.0},
+                                                    a5 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},
+                                                    a6 = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0}}
+                                    };
+
+                self.behaviour.mf.motivationTable := Tuple{cruising = Tuple{ 
+                                        aggressive = Tuple{move = 1.0,acc = 0.0,deac = 0.0,hb = 0.0},
+                                        distracted = Tuple{move = 0.75,acc = 0.0,deac = 0.25,hb = 0.0},	
+                                        attentive = Tuple{move = 0.5,acc = 0.0,deac = 0.5,hb = 0.0}},	
+                            slow = Tuple{
+                                        aggressive = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},
+                                        distracted = Tuple{move = 0.2,acc = 0.8,deac = 0.0,hb = 0.0},	
+                                        attentive = Tuple{move = 0.5,acc = 0.5,deac = 0.0,hb = 0.0}},	
+                            stopped = Tuple{
+                                        aggressive = Tuple{move = 0.0,acc = 1.0,deac = 0.0,hb = 0.0},
+                                        distracted = Tuple{move = 0.5,acc = 0.5,deac = 0.0,hb = 0.0},	
+                                        attentive = Tuple{move = 0.1,acc = 0.9,deac = 0.0,hb = 0.0}}};
+            end
+
+            decelerate()
+                begin
+                    if(self.speed > self.slowSpeed).confidence() >= self.dash.truthThreshold then
+                        self.speed := self.slowSpeed;
+                    else 
+                        self.speed := UReal(0.0, self.dash.precision); -- end;
+                    end;
+                    self.move();
+                end
+        end
+
+class CollisionMonitor < ActiveObject
+    operations 
+        initialize(c : Clock, sm : SimulationParameters)
+            begin
+                insert(c, self) into Timing;
+                insert(sm, self) into DashCollisionMonitor;
+            end
+        action()
+            begin 
+                self.checkCollisions();
+            end
+        checkCollisions()
+            begin
+                declare agents : Set(Agent), i : Incident, i2 : Incident, inCollision: UBoolean, inNC : UBoolean, bothAfterDP : UBoolean, stop: Boolean;
+                stop := false;
+                agents := self.agent;
+                for a in self.agent do
+                    agents := agents -> excluding(a);
+                    for a2 in agents do
+                        inNC := a2.nearCollision(a);
+                        inCollision := a2.collision(a);
+                        bothAfterDP := a.afterDetentionPoint() and a2.afterDetentionPoint();
+                        if (not stop) and (bothAfterDP).confidence() >= self.dash.truthThreshold then
+                            if a2.incident -> intersection(a.incident) -> isEmpty then
+                                if (inNC and not(inCollision)).confidence() >= self.dash.truthThreshold then
+                                    i := new NearCollision();
+                                    i.timestamp := self.clock.now;
+                                    insert(a, i) into PotentialCollision; 
+                                    insert(a2, i) into PotentialCollision; 
+                                else if (inCollision).confidence() >= self.dash.truthThreshold then -- in collision!
+                                        i := new Collision();
+                                        i.timestamp := self.clock.now;
+                                        insert(a, i) into PotentialCollision; 
+                                        insert(a2, i) into PotentialCollision; 
+                                        stop := true;
+                                    end;
+                                end;
+                            else
+                                if (inCollision).confidence() >= self.dash.truthThreshold then -- in collision!
+                                    i2 := a2.incident -> intersection(a.incident) -> any(true);
+                                    if i2<>null and i2.oclIsTypeOf(NearCollision) then
+                                        delete(a, i2) from PotentialCollision; 
+                                        delete(a2, i2) from PotentialCollision; 
+                                        destroy(i2);
+                                    
+                                        i := new Collision();
+                                        i.timestamp := self.clock.now;
+                                        insert(a, i) into PotentialCollision; 
+                                        insert(a2, i) into PotentialCollision; 
+                                        stop := true;
+                                    end;
+                                end;
+                            end;
+                        end;
+                    end;
+                    if stop then 
+                        a.outSimulation := true; 
+                    end;
+                end
+            end
+    end
+
+abstract class Incident
+    attributes 
+        timestamp : Real
+    end
+
+class Collision < Incident end
+
+class NearCollision < Incident end
+
+abstract class Road 
+    attributes
+        detentionPoint : UReal
+        beginRoad : UReal
+        endRoad : UReal
+        roadGrip : Real
+    operations
+        initialize(i : Intersection, sm : SimulationParameters) begin end
+    constraints
+        inv detentionPointBetweenBeginAndEnd: (self.beginRoad < self.endRoad and self.beginRoad <= self.detentionPoint and self.detentionPoint < self.endRoad
+                            ).confidence() >= self.dash.truthThreshold       
+    end
+
+class CarRoad < Road 
+    operations
+        initialize(i : Intersection, sm : SimulationParameters)
+            begin
+                insert(sm, self) into DashRoad;
+                insert(i, self) into Intersecting;
+                self.beginRoad := UReal(-10.0, self.dash.precision);  
+                self.detentionPoint := UReal(-5.0, self.dash.precision); 
+                self.endRoad := UReal(4.5, self.dash.precision); 
+                self.roadGrip := 1.0;
+            end
+    end
+
+class PedestrianRoad < Road
+    operations
+        initialize(i : Intersection, sm : SimulationParameters)
+            begin
+                insert(sm, self) into DashRoad;
+                insert(i, self) into Intersecting;
+                self.beginRoad := UReal(-5.0, self.dash.precision); 
+                self.detentionPoint := UReal(-2.5, self.dash.precision); 
+                self.endRoad := UReal(3.0, self.dash.precision); 
+                self.roadGrip := 1.0;
+            end
+    end
+
+class Intersection < PositionedElement
+    attributes
+        visibility : Real                   init : 1.0 -- good visibility
+        currentVisibility : Real            derive : self.visibility()
+        grip : Real                         init : 1.0 -- good grip
+        currentGrip : Real                  derive : self.grip()
+    operations
+        initialize(sm : SimulationParameters)
+            begin
+                insert(sm, self) into DashPositioned;
+                self.x := UReal(0.0, self.dash.precision);
+                self.y := UReal(0.0, self.dash.precision);
+            end
+
+        visibility(): Real = self.weather -> iterate(wc;product: Real = visibility| product * wc.visibilityCondition);
+        grip(): Real       = self.weather -> iterate(wc;product: Real = grip      | product * wc.gripCondition);
+    end
+
+class WeatherCondition
+    attributes
+        visibilityCondition: Real init : 0.0 -- 0 means no impact
+        gripCondition: Real       init : 0.0
+    constraints
+        inv visibilityBetween0and1: self.visibilityCondition >= 0 and self.visibilityCondition <= 1
+        inv gripBetween0and1: self.gripCondition >= 0 and self.gripCondition <= 1
+    end
+
+class Clock
+    attributes
+        now : Real               init : 0.0
+        betweenTickLapse : Real  init : 0.1
+    operations
+        tick()
+            begin
+                declare cm: ActiveObject;
+                self.now := ((self.now + self.betweenTickLapse)*1000).floor()/1000;
+                cm := self.object -> select(p: ActiveObject|p.oclIsTypeOf(CollisionMonitor)) -> any(true);
+                for o in self.object -> reject(p: ActiveObject|p.oclIsKindOf(Observer)) -> excluding(cm) do
+                    o.action();
+                end;
+                cm.action();
+                for o in self.object -> select(p: ActiveObject|p.oclIsKindOf(Observer)) -> reject(p: ActiveObject|p.oclIsKindOf(SimulationObserver)) do
+                    o.action();
+                end;
+                for o in self.object -> select(p: ActiveObject|p.oclIsKindOf(SimulationObserver)) do
+                    o.action();
+                end;
+            end
+        run(n: Integer)
+            begin
+                for i in Sequence{1..n} do self.tick() end
+            end
+    end
+
+class SimulationParameters
+    attributes
+        truthThreshold : Real                       init: 0.95
+        speedVisibilityFactor : Real                init: 0.5
+        speedGripFactor : Real                      init: 0.5
+        vRadiusVisibilityFactor : Real              init: 0.5
+        precision : Real                            init: 0.01
+        speedPeakFactor : Real                      init: 1.0
+    end
+
+abstract class PositionedElement
+    attributes
+        x : UReal init: UReal(0.0,self.dash.precision)
+        y : UReal init: UReal(0.0,self.dash.precision)
+    end
+
+abstract class ActiveObject
+    operations
+        action() begin end
+    end
+
+class TraceStorage
+    attributes
+        element : Sequence(Tuple(time: Real,
+                        x: UReal,
+                        y: UReal,
+                        speed: UReal, 
+                        sitContext: Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real),
+                        action: Tuple(move: Real,acc: Real,deac: Real,hb: Real))) init : Sequence{}
+        
+        actions : Sequence(Action) init : Sequence{}
+
+    operations
+        record(t: Real, xa: UReal, ya: UReal, spa: UReal, sC: Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real),
+            a: Tuple(move: Real,acc: Real,deac: Real,hb: Real))
+            begin
+                /* OJO: I disabled the recording of traces, because i think they are not needed now.
+                self.element := self.element -> append(Tuple{
+                    time = t,
+                    x = xa,
+                    y = ya,
+                    speed = spa,
+                    sitContext = sC,
+                    action = a
+                })
+                */
+            end
+
+        recordAction(a : Action)
+            begin
+                self.actions := self.actions -> append(a);
+            end
+                
+        print() : Sequence(Tuple(time: Real,
+                        x: UReal,
+                        y: UReal,
+                        speed: UReal, 
+                        sitContext: Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real),
+                        action: Tuple(move: Real,acc: Real,deac: Real,hb: Real))) = self.element
+    end
+
+abstract class Observer < ActiveObject end
+
+class AvgObserver < Observer
+    attributes
+        totalCollisions : Integer               init: 0
+        totalNearCollisions : Integer           init: 0  
+        totalStops : Integer                    init: 0
+        nItems : Integer                        init: 0
+    operations
+        initialize(i: Intersection, c: Clock)
+            begin
+                insert(i, self) into Observation;
+                insert(c, self) into Timing;
+            end
+        avgCollisions() : Real = self.totalCollisions / (2*self.nItems);
+        avgNearCollisions() : Real = self.totalNearCollisions / (2 * self.nItems);
+        avgStops() : Real = self.totalStops / self.nItems;
+    end
+
+class Test 
+    operations
+        runSimulation(n: Integer,peak: Boolean,grip: Real,vis: Real,prec: Real,conf: Real)
+            begin
+                declare seed: Integer, clock: Clock, sm: SimulationParameters,cmonitor: CollisionMonitor,i: Intersection,
+                        carRoad: CarRoad,pedestrianRoad: PedestrianRoad,fog: WeatherCondition,master: SimulationObserver,
+                        reckless: Real,distracted: Real,pedL: Real,pedXL: Real,rtime: Real;
+                seed := 0.srand();
+                clock := new Clock();
+                sm := new SimulationParameters();
+                    sm.vRadiusVisibilityFactor := 0.65;
+                    sm.speedGripFactor := 0.65;     -- xxx
+                    sm.speedVisibilityFactor := 0.0; -- xxx era 0.4
+                cmonitor := new CollisionMonitor();
+                    cmonitor.initialize(clock, sm);
+                i := new Intersection();
+                    i.initialize(sm);
+                carRoad := new CarRoad();
+                    carRoad.initialize(i, sm);
+                pedestrianRoad := new PedestrianRoad();
+                    pedestrianRoad.initialize(i, sm);
+                fog := new WeatherCondition();
+                    insert(i, fog) into Weather;
+                master := new SimulationObserver();
+                -- parameters of the simulation
+                fog.gripCondition := grip;
+                fog.visibilityCondition := vis;
+                sm.precision := prec;
+                sm.truthThreshold := conf;
+                if (not peak) then 
+                    sm.speedPeakFactor := 1.0;
+                    pedL := 0.0;
+                    pedXL := 0.0;
+                    reckless := 0.0;
+                    distracted := 0.0;
+                    rtime := 0.7;
+                else
+                    sm.speedPeakFactor := 1.05; -- 5% faster
+                    pedL := 0.10; -- 10% pedestrians in lines of length 2
+                    pedXL := 0.05; -- 5% pedestrians in lines of length 3
+                    reckless := 0.002; -- 0.5% reckless agents
+                    distracted := 0.04; -- 4% distracted agentes
+                    rtime := 0.6;
+                end;
+                master.initialize(reckless, distracted, pedL, pedXL, n, 15.0, rtime, sm, carRoad, pedestrianRoad, clock, cmonitor);
+                -- clock.tick(); 
+                -- clock.run(200000);
+                while not master.endSimulation() do clock.run(100) end;
+
+            end
+    end
+
+class SimulationObserver < Observer
+    attributes
+        nPedestrians : Integer              init: 0
+        nCars : Integer                     init: 0
+        nSimulations : Integer              init: 500
+        pReckless : Real                    init: 0.00
+        pDistracted : Real                  init: 0.10
+        agentsReactionTime : Real           init: 0.7
+        agentsVisionRadius : Real  
+        pPedsLengthX2 : Real              init: 0.0 -- percentage of pedestrians of double length
+        pPedsLengthX3 : Real              init: 0.0 -- percentage of pedestrians of triple length 
+    operations
+        initialize(r: Real, d: Real, x2: Real, x3: Real, sim: Integer, VR: Real, reaction: Real, sm: SimulationParameters, rx: CarRoad, ry: PedestrianRoad, c: Clock, cm: CollisionMonitor)
+        -- args: %reckless, %distracted, %pedXL, %pedXLL, numSimulations, visionRadius, reactionTime, ...
+            begin
+                declare cF: CarFactory, pF: PedestrianFactory, mtbco: AvgObserver;
+                self.nSimulations := sim;
+                self.pReckless := r;
+                self.pDistracted := d;
+                self.agentsReactionTime := (reaction*10).floor()/10;
+                self.pPedsLengthX2 := x2;
+                self.pPedsLengthX3 := x3;
+                cF := new CarFactory;
+                insert(self, cF) into SimulationFactory;
+                cF.initialize(rx, c, sm, cm);
+
+                pF := new PedestrianFactory;
+                insert(self, pF) into SimulationFactory;
+                pF.initialize(ry, c, sm, cm);
+
+                mtbco := new AvgObserver;
+                mtbco.initialize(rx.intersection, c);
+                insert(self, mtbco) into AvgsSimulation;
+
+                insert(c, self) into Timing;
+                insert(rx.intersection, self) into Observation;
+                insert(sm, self) into ObserverSimulation;
+                
+                self.agentsVisionRadius := VR; --- OJO UReal(VR, self.sm.precision);
+            end
+        endSimulation() : Boolean = ((self.nPedestrians >= self.nSimulations) and Pedestrian.allInstances -> isEmpty()) or
+                                    ((self.nCars >= self.nSimulations) and Car.allInstances -> isEmpty())
+        action()
+            begin
+                declare mood: Tuple(reckless: Real, distracted: Real), reactionTime: Real, visionRadius: Real, companions: Set(IndividualObserver);
+                for a in Agent.allInstances -> select(a: Agent|a.outSimulation) do
+                    companions := a.observer -> select(c: IndividualObserver|c.oclIsTypeOf(AgentCompanion));
+                    for c in companions do
+                        self.avg.totalCollisions := self.avg.totalCollisions + c.oclAsType(AgentCompanion).nCollisions;
+                        self.avg.totalNearCollisions := self.avg.totalNearCollisions + c.oclAsType(AgentCompanion).nNearCollisions;
+                        self.avg.totalStops := self.avg.totalStops + c.oclAsType(AgentCompanion).nStops;
+                        self.avg.nItems := self.avg.nItems + 1;
+                        destroy(c); 
+                    end;
+                    destroy(a.behaviour.sc); 
+                    destroy(a.behaviour.mf); 
+                    destroy(a.behaviour); 
+                    destroy(a.trace); 
+                    destroy(a); 
+                end;
+                if Car.allInstances -> isEmpty() and self.nCars < self.nSimulations then
+                    self.nCars := self.nCars + 1;
+                    for f in self.agentFactory -> select(f|f.oclIsTypeOf(CarFactory)) do
+                        mood := f.getMood();
+                        f.createAgent(mood, self.agentsReactionTime, self.agentsVisionRadius);
+                    end;
+                end;
+                if Pedestrian.allInstances -> isEmpty() and self.nPedestrians < self.nSimulations then
+                    self.nPedestrians := self.nPedestrians + 1;
+                    for f in self.agentFactory -> select(f|f.oclIsTypeOf(PedestrianFactory)) do
+                        mood := f.getMood();
+                        f.createAgent(mood, self.agentsReactionTime, self.agentsVisionRadius);
+                    end;
+                end;
+            end
+    end
+
+abstract class IndividualObserver < Observer
+    attributes
+        creationTime : Real
+        endingTime : Real
+    operations
+        initialize(clock: Clock, i: Intersection)
+            begin
+                insert(clock, self) into Timing;
+                insert(i, self) into Observation;
+            end
+        action()
+            begin
+                if self.endingTime.oclIsUndefined() and self.agent -> isEmpty() then
+                    self.endingTime := self.clock.now;
+                end
+            end
+    end
+
+class AgentCompanion < IndividualObserver
+    attributes
+        nStops : Integer init : 0
+        nNearCollisions : Integer init : 0
+        nCollisions : Integer init : 0
+    operations
+        action()
+            begin
+                if not(self.agent.oclIsUndefined()) and self.agent.outSimulation then
+                    self.nStops := self.agent.trace.actions -> select(a: Action|a = #HardBreak) -> size();
+                    self.nNearCollisions := self.agent.incident -> select(i: Incident|i.oclIsTypeOf(NearCollision)) -> size();
+                    self.nCollisions := self.agent.incident -> select(i: Incident|i.oclIsTypeOf(Collision)) -> size();
+                    self.endingTime := self.clock.now;
+                end;
+            end
+    end
+
+abstract class AgentFactory
+    operations
+        initialize(r : Road, c : Clock, sm : SimulationParameters, cm : CollisionMonitor)
+            begin
+                insert(r, self) into RoadFactory;
+                insert(c, self) into ClockFactory;
+                insert(sm, self) into DashFactory;
+                insert(cm, self) into CollisionMFactory;
+            end
+        createAgent(mood: Tuple(reckless: Real, distracted: Real), reactionTime: Real, visionRadius: Real)  begin end
+        getMood() : Tuple(reckless: Real, distracted: Real) 
+            = let value : Real = (1.0).rand() in
+            if value < self.smObs.pReckless then
+                    Tuple{reckless = 1.0, distracted = 0.0}
+                else
+                    if value < (self.smObs.pDistracted+self.smObs.pReckless) then
+                        Tuple{reckless = 0.0, distracted = 1.0}
+                    else
+                        Tuple{reckless = 0.0, distracted = 0.0}
+                    endif
+                endif
+    end
+
+class CarFactory < AgentFactory
+    operations
+        createAgent(mood: Tuple(reckless: Real, distracted: Real), reactionTime: Real, visionRadius: Real) 
+            begin
+                declare c: Car, o: AgentCompanion;
+                c := new Car;
+                c.initialize(self.road, self.clock, self.sm , self.cm);
+                c.behaviour.recklessMood := mood.reckless;
+                c.behaviour.distractedMood := mood.distracted;
+                c.reactionTime := (reactionTime.normalDistr(0.05)).abs(); 
+                c.reactionTime := c.reactionTime + c.reactionTime*mood.distracted/4;  
+                c.reactionTime := (c.reactionTime*10).floor()/10; 
+                c.visionRadius := UReal(visionRadius.normalDistr(2.0),self.sm.precision);
+                o := new AgentCompanion;
+                o.initialize(self.clock, self.road.intersection);
+                insert(c,o) into IndObservation;
+                o.creationTime := self.clock.now;
+            end
+    end
+
+class PedestrianFactory < AgentFactory
+    operations
+        createAgent(mood: Tuple(reckless: Real, distracted: Real), reactionTime: Real, visionRadius: Real) 
+            begin
+                declare p: Pedestrian, o: AgentCompanion, r: Real;
+                p := new Pedestrian;
+                p.initialize(self.road, self.clock, self.sm , self.cm);
+                p.behaviour.recklessMood := mood.reckless;
+                p.behaviour.distractedMood := mood.distracted;
+                p.reactionTime := (reactionTime.normalDistr(0.05)).abs(); 
+                p.reactionTime := p.reactionTime + p.reactionTime*mood.distracted/4;  
+                p.reactionTime := (p.reactionTime*10).floor()/10; 
+                p.visionRadius := UReal(visionRadius.normalDistr(2.0),self.sm.precision); 
+                r := 1.rand();
+                if r <= self.smObs.pPedsLengthX2 then
+                    p.length := p.length*2;
+                else if r <= self.smObs.pPedsLengthX2 + self.smObs.pPedsLengthX3 then
+                    p.length := p.length*3;
+                end; end;
+
+                o := new AgentCompanion;
+                o.initialize(self.clock, self.road.intersection);
+                insert(p,o) into IndObservation;
+                o.creationTime := self.clock.now;
+            end
+    end
+
+association SimulationFactory between
+    SimulationObserver [1] role smObs
+    AgentFactory [*] role agentFactory
+end
+
+association AvgsSimulation between
+    SimulationObserver [1] role smObs
+    AvgObserver [1] role avg
+end
+
+association RoadFactory between
+    Road [1] role road
+    AgentFactory [*] role agentFactory
+end
+
+association ClockFactory between
+    Clock [1] role clock
+    AgentFactory [*] role agentFactory
+end
+
+association DashFactory between
+    SimulationParameters [1] role sm
+    AgentFactory [*] role agentFactory
+end
+
+association ObserverSimulation between
+    SimulationParameters [1] role sm
+    SimulationObserver [*] role smo
+end
+
+association CollisionMFactory between
+    CollisionMonitor [1] role cm
+    AgentFactory [*] role agentFactory
+end
+
+association Observation between
+    Intersection [1] role intersection
+    Observer [*] role observer
+end
+
+association IndObservation between
+    Agent [0..1] role agent
+    IndividualObserver [*] role observer
+end
+
+association Movements between
+    Agent [1] role agent
+    TraceStorage [1] role trace
+end
+
+association PotentialCollision between
+    Agent [2] role agent
+    Incident [*] role incident
+end
+
+association Timing between
+    Clock [1] role clock
+    ActiveObject [1..*] role object ordered
+end
+
+association CollisionMonitoring between
+    Agent [*] role agent
+    CollisionMonitor [1] role monitor
+end
+
+association Path between 
+    Road [1] role road
+    Agent [*] role agent
+end
+
+association DashPositioned between
+    SimulationParameters [1] role dash
+    PositionedElement [*] role ps
+end
+
+association DashCollisionMonitor between
+    SimulationParameters [1] role dash
+    CollisionMonitor [*] role monitor
+end
+
+association DashRoad between
+    SimulationParameters [1] role dash
+    Road [*] role road
+end
+
+aggregation AgentBehaviour between
+    Agent [0..1] role agent
+    Behaviour [1] role behaviour
+end
+
+aggregation Weather between 
+    Intersection [*] role intersection
+    WeatherCondition [*] role weather
+end 
+
+aggregation Intersecting between
+    Intersection [0..1] role intersection
+    Road [2] role road
+end
+
+association MotForceTable between
+    MotivationalForceTables [1] role mf
+    Behaviour [1] role behav
+end
+
+association SitContextTable between
+    SituationalContextTables [1] role sc
+    Behaviour [1] role behav
+end

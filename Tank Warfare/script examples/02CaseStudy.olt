@@ -1,0 +1,2438 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<diagram_Layout version="13">
+    <diagramOptions>
+        <autolayout>false</autolayout>
+        <antialiasing>false</antialiasing>
+        <showassocnames>false</showassocnames>
+        <showattributes>true</showattributes>
+        <showmultiplicities>false</showmultiplicities>
+        <showoperations>false</showoperations>
+        <showrolenames>true</showrolenames>
+        <showgrid>false</showgrid>
+        <ShowStates>false</ShowStates>
+    </diagramOptions>
+    <node id="Behaviour2" sizeCalculated="true" type="Object">
+        <name>Behaviour2</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>1460.2022659864363</x>
+            <y>604.7856375160433</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="Behaviour1" sizeCalculated="true" type="Object">
+        <name>Behaviour1</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>1138.7820472065732</x>
+            <y>605.6632518844149</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="Behaviour4" sizeCalculated="true" type="Object">
+        <name>Behaviour4</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>515.1766884599887</x>
+            <y>612.1346026316503</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="clock" sizeCalculated="true" type="Object">
+        <name>clock</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>852.8259459199176</x>
+            <y>217.3794218842073</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="Behaviour3" sizeCalculated="true" type="Object">
+        <name>Behaviour3</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>234.32743135239446</x>
+            <y>604.3743122833326</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="t10" sizeCalculated="true" type="Object">
+        <name>t10</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>1087.1049043316643</x>
+            <y>172.3828049475705</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="t01" sizeCalculated="true" type="Object">
+        <name>t01</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>463.4922801288469</x>
+            <y>188.510153987953</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="t11" sizeCalculated="true" type="Object">
+        <name>t11</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>1406.763055031428</x>
+            <y>168.3010274517016</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="t00" sizeCalculated="true" type="Object">
+        <name>t00</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>182.61998628041476</x>
+            <y>193.67335231310943</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="sp" sizeCalculated="true" type="Object">
+        <name>sp</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>845.3900618398338</x>
+            <y>65.23124891921155</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <edge type="BinaryEdge">
+        <source>t01</source>
+        <target>sp</target>
+        <name>TankSimulationParams</name>
+        <properties>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t01)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t01)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t01)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>sp</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t01)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t01)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>*</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t01)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t01)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>t</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t01)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t01)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>TankSimulationParams</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[TankSimulationParams : (sp:sp, t:t01)]::WayPoint::0</related0>
+                        <related1>[TankSimulationParams : (sp:sp, t:t01)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t01)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t01)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[TankSimulationParams : (sp:sp, t:t01)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>clock</source>
+        <target>t10</target>
+        <name>Timing</name>
+        <properties>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t10)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>object {ordered}</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t10)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t10)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>*</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t10)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t10)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>clock</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t10)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t10)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t10)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t10)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>Timing</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[Timing : (clock:clock, object:t10)]::WayPoint::0</related0>
+                        <related1>[Timing : (clock:clock, object:t10)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t10)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t10)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[Timing : (clock:clock, object:t10)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>t11</source>
+        <target>Behaviour2</target>
+        <name>TankBehaviour</name>
+        <properties>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behaviour</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>tank</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>0..1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>TankBehaviour</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::WayPoint::0</related0>
+                        <related1>[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour2, tank:t11)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[TankBehaviour : (behaviour:Behaviour2, tank:t11)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>clock</source>
+        <target>t11</target>
+        <name>Timing</name>
+        <properties>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t11)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>*</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t11)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t11)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>object {ordered}</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t11)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t11)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>clock</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t11)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t11)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t11)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t11)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>Timing</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[Timing : (clock:clock, object:t11)]::WayPoint::0</related0>
+                        <related1>[Timing : (clock:clock, object:t11)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t11)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t11)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[Timing : (clock:clock, object:t11)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>clock</source>
+        <target>t00</target>
+        <name>Timing</name>
+        <properties>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t00)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>*</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t00)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t00)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>object {ordered}</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t00)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t00)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t00)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t00)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>clock</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t00)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t00)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>Timing</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[Timing : (clock:clock, object:t00)]::WayPoint::0</related0>
+                        <related1>[Timing : (clock:clock, object:t00)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t00)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t00)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[Timing : (clock:clock, object:t00)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>t01</source>
+        <target>Behaviour4</target>
+        <name>TankBehaviour</name>
+        <properties>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behaviour</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>tank</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>0..1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>TankBehaviour</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::WayPoint::0</related0>
+                        <related1>[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour4, tank:t01)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[TankBehaviour : (behaviour:Behaviour4, tank:t01)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>t11</source>
+        <target>sp</target>
+        <name>TankSimulationParams</name>
+        <properties>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t11)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t11)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t11)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>sp</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t11)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t11)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>*</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t11)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t11)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>t</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t11)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t11)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>TankSimulationParams</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[TankSimulationParams : (sp:sp, t:t11)]::WayPoint::0</related0>
+                        <related1>[TankSimulationParams : (sp:sp, t:t11)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t11)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t11)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[TankSimulationParams : (sp:sp, t:t11)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>t00</source>
+        <target>sp</target>
+        <name>TankSimulationParams</name>
+        <properties>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t00)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t00)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t00)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>sp</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t00)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t00)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>t</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t00)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t00)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>*</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t00)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t00)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>TankSimulationParams</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[TankSimulationParams : (sp:sp, t:t00)]::WayPoint::0</related0>
+                        <related1>[TankSimulationParams : (sp:sp, t:t00)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t00)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t00)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[TankSimulationParams : (sp:sp, t:t00)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>t10</source>
+        <target>Behaviour1</target>
+        <name>TankBehaviour</name>
+        <properties>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behaviour</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>tank</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>0..1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>TankBehaviour</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::WayPoint::0</related0>
+                        <related1>[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour1, tank:t10)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[TankBehaviour : (behaviour:Behaviour1, tank:t10)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>t00</source>
+        <target>Behaviour3</target>
+        <name>TankBehaviour</name>
+        <properties>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behaviour</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>tank</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>0..1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>TankBehaviour</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::WayPoint::0</related0>
+                        <related1>[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankBehaviour : (behaviour:Behaviour3, tank:t00)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[TankBehaviour : (behaviour:Behaviour3, tank:t00)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>clock</source>
+        <target>t01</target>
+        <name>Timing</name>
+        <properties>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t01)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>object {ordered}</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t01)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t01)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>*</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t01)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t01)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t01)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t01)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>clock</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[Timing : (clock:clock, object:t01)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t01)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>Timing</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[Timing : (clock:clock, object:t01)]::WayPoint::0</related0>
+                        <related1>[Timing : (clock:clock, object:t01)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t01)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[Timing : (clock:clock, object:t01)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[Timing : (clock:clock, object:t01)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>t10</source>
+        <target>sp</target>
+        <name>TankSimulationParams</name>
+        <properties>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t10)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t10)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t10)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>sp</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t10)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t10)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>t</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t10)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t10)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>*</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[TankSimulationParams : (sp:sp, t:t10)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t10)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>TankSimulationParams</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[TankSimulationParams : (sp:sp, t:t10)]::WayPoint::0</related0>
+                        <related1>[TankSimulationParams : (sp:sp, t:t10)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t10)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[TankSimulationParams : (sp:sp, t:t10)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>false</hidden>
+        <linkValue>[TankSimulationParams : (sp:sp, t:t10)]</linkValue>
+    </edge>
+    <node id="SituationalContextTables2" sizeCalculated="true" type="Object">
+        <name>SituationalContextTables2</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>39.47221907309131</x>
+            <y>720.7649246986076</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="SituationalContextTables1" sizeCalculated="true" type="Object">
+        <name>SituationalContextTables1</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>43.60912195473111</x>
+            <y>814.0588316309257</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="MotivationalForceTables2" sizeCalculated="true" type="Object">
+        <name>MotivationalForceTables2</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>43.0311180220225</x>
+            <y>769.0843779312754</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="MotivationalForceTables1" sizeCalculated="true" type="Object">
+        <name>MotivationalForceTables1</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>45.094301881452566</x>
+            <y>859.6617356012067</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="SituationalContextTables4" sizeCalculated="true" type="Object">
+        <name>SituationalContextTables4</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>79.22579929988291</x>
+            <y>86.57780267715455</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="SituationalContextTables3" sizeCalculated="true" type="Object">
+        <name>SituationalContextTables3</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>1.7690126206704848</x>
+            <y>6.77388117868003</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="MotivationalForceTables4" sizeCalculated="true" type="Object">
+        <name>MotivationalForceTables4</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>35.153465899875926</x>
+            <y>12.00864954772982</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <node id="MotivationalForceTables3" sizeCalculated="true" type="Object">
+        <name>MotivationalForceTables3</name>
+        <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyFixed">
+            <x>94.23441521613321</x>
+            <y>12.800211279059436</y>
+        </strategy>
+        <hidden>false</hidden>
+    </node>
+    <edge type="BinaryEdge">
+        <source>MotivationalForceTables1</source>
+        <target>Behaviour1</target>
+        <name>MotForceTable</name>
+        <properties>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behav</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>mf</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>MotForceTable</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::WayPoint::0</related0>
+                        <related1>[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>true</hidden>
+        <linkValue>[MotForceTable : (behav:Behaviour1, mf:MotivationalForceTables1)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>MotivationalForceTables3</source>
+        <target>Behaviour3</target>
+        <name>MotForceTable</name>
+        <properties>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behav</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>mf</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>MotForceTable</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::WayPoint::0</related0>
+                        <related1>[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>true</hidden>
+        <linkValue>[MotForceTable : (behav:Behaviour3, mf:MotivationalForceTables3)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>SituationalContextTables2</source>
+        <target>Behaviour2</target>
+        <name>SitContextTable</name>
+        <properties>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behav</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>sc</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>SitContextTable</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::WayPoint::0</related0>
+                        <related1>[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>true</hidden>
+        <linkValue>[SitContextTable : (behav:Behaviour2, sc:SituationalContextTables2)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>SituationalContextTables4</source>
+        <target>Behaviour4</target>
+        <name>SitContextTable</name>
+        <properties>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behav</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>sc</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>SitContextTable</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::WayPoint::0</related0>
+                        <related1>[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>true</hidden>
+        <linkValue>[SitContextTable : (behav:Behaviour4, sc:SituationalContextTables4)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>MotivationalForceTables2</source>
+        <target>Behaviour2</target>
+        <name>MotForceTable</name>
+        <properties>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behav</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>mf</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>MotForceTable</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::WayPoint::0</related0>
+                        <related1>[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>true</hidden>
+        <linkValue>[MotForceTable : (behav:Behaviour2, mf:MotivationalForceTables2)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>SituationalContextTables1</source>
+        <target>Behaviour1</target>
+        <name>SitContextTable</name>
+        <properties>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behav</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>sc</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>SitContextTable</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::WayPoint::0</related0>
+                        <related1>[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>true</hidden>
+        <linkValue>[SitContextTable : (behav:Behaviour1, sc:SituationalContextTables1)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>MotivationalForceTables4</source>
+        <target>Behaviour4</target>
+        <name>MotForceTable</name>
+        <properties>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behav</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>mf</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>MotForceTable</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::WayPoint::0</related0>
+                        <related1>[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>true</hidden>
+        <linkValue>[MotForceTable : (behav:Behaviour4, mf:MotivationalForceTables4)]</linkValue>
+    </edge>
+    <edge type="BinaryEdge">
+        <source>SituationalContextTables3</source>
+        <target>Behaviour3</target>
+        <name>SitContextTable</name>
+        <properties>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::target::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::target::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>behav</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::WayPoint::1</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::source::rolename"
+                sizeCalculated="true" type="rolename"
+                userDefined="false" visible="true">
+                <name>sc</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>TOP</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::source::multiplicity"
+                sizeCalculated="true" type="multiplicity"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyRelativeToAttached">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <attached>[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::WayPoint::0</attached>
+                    <offset_x>8</offset_x>
+                    <offset_y>8</offset_y>
+                    <placement>BOTTOM</placement>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::AssociationName"
+                sizeCalculated="true" type="associationName"
+                userDefined="false" visible="true">
+                <name>SitContextTable</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyInBetween">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                    <offsetX>0.0</offsetX>
+                    <offsetY>-10.0</offsetY>
+                    <related length="2">
+                        <related0>[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::WayPoint::0</related0>
+                        <related1>[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::WayPoint::1</related1>
+                    </related>
+                </strategy>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </properties>
+        <waypoints>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::WayPoint::0"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>0</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>0</id>
+                <specialid>1</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+            <edgeproperty
+                id="[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]::WayPoint::1"
+                sizeCalculated="true" type="WayPoint"
+                userDefined="false" visible="true">
+                <name>1</name>
+                <strategy type="org.tzi.use.gui.views.diagrams.elements.positioning.StrategyAttachedIntersection">
+                    <userOffsetX>0.0</userOffsetX>
+                    <userOffsetY>0.0</userOffsetY>
+                </strategy>
+                <id>1</id>
+                <specialid>2</specialid>
+                <hidden>false</hidden>
+            </edgeproperty>
+        </waypoints>
+        <hidden>true</hidden>
+        <linkValue>[SitContextTable : (behav:Behaviour3, sc:SituationalContextTables3)]</linkValue>
+    </edge>
+</diagram_Layout>

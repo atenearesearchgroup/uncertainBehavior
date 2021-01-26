@@ -1,0 +1,145 @@
+-----------------------------------------------------------------
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+-----------------------------------------------------------------
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,1.0,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+-----------------------------------------------------------------
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,1.0,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+-----------------------------------------------------------------
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+reset
+!new Test('test')
+!test.runSimulation(1000,false,0.8,0.8,0.025,0.95) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()
+-----------------------------------------------------------------

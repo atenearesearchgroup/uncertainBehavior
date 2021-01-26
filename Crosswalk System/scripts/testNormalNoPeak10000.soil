@@ -1,0 +1,7 @@
+reset
+!new Test('test')
+!test.runSimulation(2000,false,0.8,0.8,0.01,0.99) -- (numSimulations,peak?,grip,visib.,precision,conf)
+?Clock1.now
+?AvgObserver1.avgStops()
+?AvgObserver1.avgNearCollisions()
+?AvgObserver1.avgCollisions()

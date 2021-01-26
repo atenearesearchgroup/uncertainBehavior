@@ -1,0 +1,926 @@
+model Firefight
+
+class Tank < ActiveObject
+    attributes
+        name: Integer
+        team: Integer
+        health: UReal
+        power: UReal
+        powerConsumption: UReal
+        ammo: Integer                    init: 100
+        maxDamage: UReal
+
+        visionRadius: UReal
+        range: UReal
+        drift: Real                      init: 0.01
+
+        xPos: UReal                   
+        yPos: UReal
+        width: UReal
+        angle: UReal
+
+        maxSpeed: UReal
+        speed: UReal
+
+        vulnerability: UReal             derive: health/3+power/3+ammo/3
+        vulnerableBound: UReal
+        destroyed : Boolean              init : false
+        stops : Integer                  init : 0
+
+        closestEnemy : Tank
+        closestAlly : Tank
+
+        hit: UReal
+
+        decisionValues : Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real)
+                    init: Tuple{shoot = 0.0, escape = 0.0, joinAlly = 0.0, chaseEnemy = 0.0, stop = 0.0}
+        situationalContext : Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real, a7: Real, a8: Real, a9: Real) 
+                    init: Tuple{a1 = 0.0, a2 = 0.0, a3 = 0.0, a4 = 0.0, a5 = 0.0, a6 = 0.0, a7 = 0.0, a8 = 0.0, a9 = 0.0}
+
+    operations
+        initialize(c: Clock, sm: SimulationParameters, tm: TraceStorageMaster)
+            begin
+                declare b: Behaviour, t: TraceStorage;
+                insert(c, self) into Timing;
+                insert(self, sm) into TankSimulationParams;
+                self.health :=              UReal(100, self.sp.precision);
+                self.power :=               UReal(100, self.sp.precision);
+                self.powerConsumption :=    UReal(5.0, self.sp.precision);
+                self.visionRadius :=        UReal(10, self.sp.precision);
+                self.range :=               UReal(5, self.sp.precision);
+                self.xPos :=                UReal(20.rand(), self.sp.precision);
+                self.yPos :=                UReal(20.rand(), self.sp.precision);
+                self.width :=               UReal(2, self.sp.precision);
+                self.angle :=               UReal(3.rand().atan(), self.sp.precision);
+                self.maxSpeed :=            UReal(20.0, self.sp.precision);
+                self.speed :=               self.maxSpeed;
+                self.vulnerableBound :=     UReal(30.0, self.sp.precision);
+                self.maxDamage :=           UReal(50.0, self.sp.precision);
+                
+                self.setTankPosition();
+
+                b := new Behaviour();
+                b.initialize();
+                insert(self, b) into TankBehaviour;
+                self.initializeBehaviour();
+
+                t := new TraceStorage();
+                t.initialize(tm);
+                insert(self, t) into Movements;              
+            end
+        
+        initializeBehaviour()
+            begin
+                self.behaviour.sc.decisionTable := Tuple{lowVulnerability = Tuple{
+                                                    a1 = Tuple{shoot = 0.0,escape = 0.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 1.0},
+                                                    a2 = Tuple{shoot = 0.0,escape = 0.0,joinAlly = 0.0,chaseEnemy = 1.0,stop = 0.0},	
+                                                    a3 = Tuple{shoot = 1.0,escape = 0.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 0.0},	
+                                                    a4 = Tuple{shoot = 0.0,escape = 0.0,joinAlly = 1.0,chaseEnemy = 0.0,stop = 0.0},
+                                                    a5 = Tuple{shoot = 0.0,escape = 0.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 1.0},
+                                                    a6 = Tuple{shoot = 0.0,escape = 1.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 0.0},
+                                                    a7 = Tuple{shoot = 0.0,escape = 1.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 0.0},
+                                                    a8 = Tuple{shoot = 0.0,escape = 0.0,joinAlly = 0.0,chaseEnemy = 1.0,stop = 0.0},
+                                                    a9 = Tuple{shoot = 1.0,escape = 0.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 0.0}},	
+                                    highVulnerability = Tuple{   
+                                                    a1 = Tuple{shoot = 0.0,escape = 0.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 1.0},
+                                                    a2 = Tuple{shoot = 0.0,escape = 1.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 0.0},	
+                                                    a3 = Tuple{shoot = 0.5,escape = 0.5,joinAlly = 0.0,chaseEnemy = 0.0,stop = 0.0},	
+                                                    a4 = Tuple{shoot = 0.0,escape = 0.0,joinAlly = 1.0,chaseEnemy = 0.0,stop = 0.0},
+                                                    a5 = Tuple{shoot = 0.0,escape = 0.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 1.0},
+                                                    a6 = Tuple{shoot = 0.0,escape = 1.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 0.0},
+                                                    a7 = Tuple{shoot = 0.0,escape = 1.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 0.0},
+                                                    a8 = Tuple{shoot = 0.0,escape = 0.0,joinAlly = 1.0,chaseEnemy = 0.0,stop = 0.0},
+                                                    a9 = Tuple{shoot = 1.0,escape = 0.0,joinAlly = 0.0,chaseEnemy = 0.0,stop = 0.0}}	
+                                    };
+                self.behaviour.mf.motivationTable := Tuple{lowVulnerability = Tuple{ 
+                                        bold = Tuple{shoot = 0.5,escape = 0.0,joinAlly = 0.0,chaseEnemy = 0.5,stop = 0.0},
+                                        coward = Tuple{shoot = 0.0,escape = 0.5,joinAlly = 0.5,chaseEnemy = 0.0,stop = 0.0}},	
+                            highVulnerability = Tuple{
+                                        bold = Tuple{shoot = 0.5,escape = 0.0,joinAlly = 0.0,chaseEnemy = 0.5,stop = 0.0},
+                                        coward = Tuple{shoot = 0.0,escape = 0.5,joinAlly = 0.5,chaseEnemy = 0.0,stop = 0.0}}};
+            end
+        setTankPosition()
+            begin
+                while not(Tank.allInstances -> forAll(ta: Tank|self<>ta implies ((ta.xPos <> self.xPos or ta.yPos <> self.yPos).confidence >= self.sp.truthThreshold))) do
+                    self.xPos := UReal(20.rand(), self.sp.precision);
+                end;
+            end
+        action()
+            begin
+                self.closestAlly := self.closestAllyTank();
+                self.closestEnemy := self.closestEnemyTank();
+                if (self.health > UReal(0.0, self.sp.precision) or self.power > UReal(0.0, self.sp.precision)).confidence >= self.sp.truthThreshold then -- no health, out of the battle
+                    if self.stops >= 5 then
+                        self.destroyed := true;
+                        --WriteLine('To destroy because stoppped');
+                    else
+                        self.makeADecision();
+                    end;
+                else
+                    self.destroyed := true;
+                    --WriteLine('To destroy because no health or no power');
+                end;
+            end
+
+        makeADecision()
+            begin
+                declare vulnerable : UBoolean, 
+                        sitContextValues : Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real, a7: Real, a8: Real, a9: Real),
+                        decision: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real);
+
+                vulnerable := self.vulnerability > self.vulnerableBound;
+
+                sitContextValues := self.behaviour.situationalContextValues();
+
+                if vulnerable.confidence() >= 0.5 then
+                    decision := self.behaviour.behaviourLowVulnerability(sitContextValues.a1, sitContextValues.a2, sitContextValues.a3
+                    , sitContextValues.a4, sitContextValues.a5, sitContextValues.a6, sitContextValues.a7, sitContextValues.a8, sitContextValues.a9)
+                else
+                    decision := self.behaviour.behaviourHighVulnerability(sitContextValues.a1, sitContextValues.a2, sitContextValues.a3
+                    , sitContextValues.a4, sitContextValues.a5, sitContextValues.a6, sitContextValues.a7, sitContextValues.a8, sitContextValues.a9)
+                end;
+
+                self.decisionValues := decision;
+                
+                self.situationalContext := sitContextValues;
+
+                self.trace.record(self.clock.now, self.xPos, self.yPos, self.speed, self.health, self.ammo, self.power, self.closestAlly.name, 
+                    self.closestEnemy.name, self.team, sitContextValues, decision);
+
+                if decision.shoot >= decision.escape and decision.shoot >= decision.joinAlly and decision.shoot >= decision.chaseEnemy and decision.shoot >= decision.stop then
+                    self.shoot();
+                else if decision.escape >= decision.shoot and decision.escape >= decision.joinAlly and decision.escape >= decision.chaseEnemy and decision.escape >= decision.stop then
+                        self.escape();
+                    else if decision.joinAlly >= decision.shoot and decision.joinAlly >= decision.escape and decision.joinAlly >= decision.chaseEnemy and decision.joinAlly >= decision.stop then
+                            self.joinAlly();
+                        else if decision.chaseEnemy >= decision.shoot and decision.chaseEnemy >= decision.escape and decision.chaseEnemy >= decision.joinAlly and decision.chaseEnemy >= decision.stop then
+                            self.chaseEnemy();
+                            else
+                                self.stop();
+                            end;
+                        end;
+                    end;
+                end;
+            end
+
+        move()
+            begin
+                declare d: UReal;
+                if (self.power > UReal(0.0, self.sp.precision)).confidence >= self.sp.truthThreshold then
+                    self.power := self.power-self.powerConsumption;
+                    d := self.speed*self.clock.betweenTickLapse;
+                    self.xPos := self.xPos+d*self.angle.cos();
+                    self.yPos := self.yPos+d*self.angle.sin();
+                    self.stops := 0;
+                else
+                    self.stop();
+                end;
+            end
+
+        rotate(angle : UReal) 
+            begin
+                self.angle := angle;
+            end
+
+        angleTowards(a: Tank): UReal
+            begin
+                declare x: UReal, y: UReal;
+                y := a.yPos - self.yPos;
+                x := a.xPos - self.xPos;
+                if ((x.value()-x.uncertainty()<= 0)and(x.value()+x.uncertainty()>= 0)) then -- x = 0? 
+                    if ((y >= UReal(0.0, self.sp.precision)).confidence()>= 0.5) then  -- y>= 0?
+                        result := UReal(2 * 1.atan(), y.uncertainty); -- 2*(pi/4) = pi/2
+                    else
+                        result := UReal(2 * 3 * 1.atan(), y.uncertainty); -- 3*2*(pi/4) = 3/2 * pi
+                    end;
+                else
+                    result := (y/x).atan(); 
+                    if (y <= UReal(0.0, self.sp.precision)).confidence >= self.sp.truthThreshold then
+                        result := result + UReal(4 * 1.atan(), self.sp.precision);
+                    end;
+                end;
+            end
+
+        hitsTarget(target: Tank) : UBoolean =
+            let distance : UReal =  self.distance(target) in
+            let driftRange : UReal = UReal(-self.drift+2*self.drift.rand(),self.sp.precision) in
+            (((self.xPos + self.width) - (target.xPos + target.width))+(distance+self.width+target.width)*self.angle.cos()).abs() <= driftRange and
+            (((self.yPos + self.width) - (target.yPos + target.width))+(distance+self.width+target.width)*self.angle.sin()).abs() <= driftRange
+
+        distance(t: Tank) : UReal = ((self.xPos - t.xPos)*(self.xPos - t.xPos) + (self.yPos - t.yPos)*(self.yPos - t.yPos)).sqrt()
+            - self.width - t.width;
+
+        closestTank(tanks : Set(Tank)) : Tank
+            begin
+                declare closestDistance: UReal, auxDistance: UReal, closestTank: Tank;
+                closestTank := tanks -> any(true);
+                closestDistance := self.distance(closestTank);
+                for t in tanks do
+                    auxDistance := self.distance(t);
+                    if (auxDistance < closestDistance).confidence >= self.sp.truthThreshold then
+                        closestDistance := auxDistance;
+                        closestTank := t;
+                    end;                
+                end;
+                result := closestTank;
+            end
+        
+        closestEnemyTank() : Tank
+            begin
+                declare enemies: Set(Tank);
+                enemies := Tank.allInstances() -> excluding(self) ->
+                            select(t: Tank|t.team<>self.team and (t.health > UReal(0.0, self.sp.precision)).confidence >= self.sp.truthThreshold and
+                            ((self.distance(t) < self.visionRadius).confidence >= self.sp.truthThreshold));
+                result := self.closestTank(enemies);
+            end
+        
+        closestEnemyTankInRange() : Tank
+            begin
+                declare enemies: Set(Tank);
+                enemies := Tank.allInstances() -> excluding(self) ->
+                            select(t: Tank|t.team<>self.team and (t.health > UReal(0.0, self.sp.precision)).confidence >= self.sp.truthThreshold and
+                            ((self.distance(t) < self.range).confidence >= self.sp.truthThreshold));
+                result := self.closestTank(enemies);
+            end
+        
+        closestAllyTank() : Tank
+            begin
+                declare allies: Set(Tank);
+                allies := Tank.allInstances() -> excluding(self) ->
+                            select(t: Tank|t.team = self.team and 
+                            ((self.distance(t) < self.visionRadius).confidence >= self.sp.truthThreshold));
+                result := self.closestTank(allies);
+            end
+
+        chase(a: Tank)
+            begin
+                declare an: UReal;
+                if not(a.oclIsUndefined()) then
+                    if (self.distance(a) > UReal(0.0, self.sp.precision)).confidence >= self.sp.truthThreshold then
+                        an := self.angleTowards(a);
+                        self.rotate(an);
+                        self.move();
+                    end
+                end
+            end
+        
+        chaseEnemy()
+            begin
+                declare closest: Tank;
+                closest := self.closestEnemyTank();
+                self.chase(closest);
+            end
+            
+        joinAlly()
+            begin
+                declare closest: Tank;
+                closest := self.closestAllyTank();
+                self.chase(closest);
+            end
+
+        escape()
+            begin
+                declare opposite_an: UReal, an: UReal, x: UReal, y: UReal, closestEnemy: Tank;
+                closestEnemy := self.closestEnemyTank();
+                an := self.angleTowards(closestEnemy);
+                opposite_an := (an + UReal(4 * 1.atan(), self.sp.precision));
+                if (opposite_an >= UReal(8 * 1.atan(), self.sp.precision)).confidence >= self.sp.truthThreshold then
+                    opposite_an := opposite_an - UReal(8 * 1.atan(), self.sp.precision);
+                end;
+                self.rotate(opposite_an);
+                self.move();
+            end
+        
+        shoot()
+            begin
+                declare hit: UBoolean, closest: Tank, angleT: UReal;
+                if self.ammo > 0 and (self.power > UReal(0.0, self.sp.precision)).confidence >= self.sp.truthThreshold then
+                    self.ammo := self.ammo - 1;
+                    self.power := self.power-2*self.powerConsumption;
+                    closest := self.closestEnemyTankInRange();
+                    if not(closest.oclIsUndefined()) then
+                        angleT := self.angleTowards(closest);
+                        self.rotate(angleT);
+                        hit := self.hitsTarget(closest);
+                        self.hit := UReal(hit.confidence, self.sp.precision);
+                        closest.health := closest.health-self.maxDamage*UReal(hit.confidence, self.sp.precision);
+                        if(closest.health <= UReal(0.0, self.sp.precision)).confidence >= self.sp.truthThreshold then
+                            closest.health := UReal(0.0, self.sp.precision);
+                            closest.trace.record(closest.clock.now, closest.xPos, closest.yPos, closest.speed, closest.health, closest.ammo, closest.power, closest.closestAlly.name, 
+                                closest.closestEnemy.name, closest.team, closest.situationalContext, Tuple{shoot = 0.0, escape = 0.0, joinAlly = 0.0, chaseEnemy = 0.0, stop = 1.0});
+                        end;
+                        if(self.power < UReal(0.0, self.sp.precision)).confidence >= self.sp.truthThreshold then
+                            self.power := UReal(0.0, self.sp.precision);
+                        end;
+                        self.stops := 0;
+                    end;
+                else 
+                    self.stop();
+                end;
+                
+            end
+    
+        stop()
+            begin
+                --self.power := self.power+self.powerConsumption;
+                --if (self.power > UReal(100, self.sp.precision)).confidence > self.sp.truthThreshold then
+                    --self.power := UReal(100, self.sp.precision);
+                --end;
+                self.speed := UReal(0.0, self.sp.precision);
+                self.stops := self.stops + 1;
+            end
+    end
+
+class TankFactory
+    attributes
+        tankNames : Integer     init: 0
+    operations
+        initialize(tm : TraceStorageMaster, c : Clock, sp : SimulationParameters) 
+            begin
+                insert(c, self) into ClockFactory;
+                insert(sp, self) into SimulationFactory;
+                insert(tm, self) into TraceFactory;
+            end
+        createTank(team : Integer) 
+            begin
+                declare t: Tank;
+                t := new Tank();
+                t.name := self.tankNames;
+                self.tankNames := self.tankNames + 1;
+                t.team := team;
+                t.initialize(self.c, self.sp, self.tm);
+                t.behaviour.boldMood := 1.0.rand();
+                t.closestEnemy := t.closestEnemyTank();
+                t.closestAlly := t.closestAllyTank();
+                WriteLine('Tank created');
+         end
+    end
+
+class Behaviour
+    attributes
+        boldMood: Real                           init: 0.0
+        cowardMood: Real                         derive: 1-boldMood
+        situationalContextWeight: Real           init: 0.5
+        motivationalForceWeight: Real            derive: 1.0-self.situationalContextWeight
+    operations
+        initialize()
+            begin
+                declare mft : MotivationalForceTables, sct : SituationalContextTables;
+                
+                mft := new MotivationalForceTables();
+                insert(mft, self) into MotForceTable;
+
+                sct := new SituationalContextTables();
+                insert(sct, self) into SitContextTable;
+            end
+        
+        situationalContextValues(): Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real, a7: Real, a8: Real, a9: Real)
+            begin
+                declare res1 : UBoolean, 
+                        res2 : UBoolean, 
+                        res3 : UBoolean, 
+                        res4 : UBoolean, 
+                        res5 : UBoolean, 
+                        res6 : UBoolean,
+                        res7 : UBoolean, 
+                        res8 : UBoolean, 
+                        res9 : UBoolean,
+                        tmp : UBoolean,
+                        tmp2 : UBoolean,
+                        dist : UReal, 
+                        allies : Set(Tank),
+                        enemies : Set(Tank),
+                        all : Set(Tank); 
+                
+                all := Tank.allInstances -> excluding(self.tank) -> select(t: Tank|
+                    (t.health > UReal(0.0, self.tank.sp.precision)).confidence >= self.tank.sp.truthThreshold
+                    and (t.power > UReal(0.0, self.tank.sp.precision)).confidence >= self.tank.sp.truthThreshold
+                    and not(t.destroyed));
+                allies := all -> select(t: Tank|t.team = self.tank.team);
+                enemies := all -> select(t: Tank|t.team <> self.tank.team);
+
+                -- A1 - No allies, no enemies in visionRadius
+                    if not(allies -> isEmpty() and enemies -> isEmpty()) then
+                        res1 := UBoolean(true, 1);
+                        for t in all do
+                            dist := self.tank.distance(t);
+                            res1 := res1 and (dist > self.tank.visionRadius);
+                        end;
+                        --res1 := res1 or (allies -> isEmpty() and enemies -> isEmpty());
+                    else
+                        res1 := UBoolean(true, 1);
+                    end;
+                    
+
+                -- A3 - No allies in VR. Enemies in SR.
+                    res3 := UBoolean(true, 1);
+                    for t in allies do
+                        dist := self.tank.distance(t);
+                        res3 := res3 and (dist > self.tank.visionRadius);
+                    end;
+
+                    tmp := UBoolean(true, 0);
+                    for t in enemies do
+                        dist := self.tank.distance(t);
+                        tmp := tmp or (dist <= self.tank.range);
+                    end;
+                    res3 := res3 and tmp;
+
+                -- A2 - No allies in VR. Enemies in VR.
+                    res2 := UBoolean(true, 1);
+                    for t in allies do
+                        dist := self.tank.distance(t);
+                        res2 := res2 and (dist > self.tank.visionRadius);
+                    end;
+
+                    tmp := UBoolean(true, 0);
+                    for t in enemies do
+                        dist := self.tank.distance(t);
+                        tmp := tmp or (dist <= self.tank.visionRadius and dist > self.tank.range);
+                    end;
+                    res2 := res2 and tmp and not(res3);
+
+                -- A5 - Allies in SR. No Enemies in VR.
+                    res5 := UBoolean(true, 0);
+                    for t in allies do
+                        dist := self.tank.distance(t);
+                        res5 := res5 or (dist <= self.tank.range);
+                    end;
+
+                    tmp := UBoolean(true, 1);
+                    for t in enemies do
+                        dist := self.tank.distance(t);
+                        tmp := tmp and (dist > self.tank.visionRadius);
+                    end;
+                    res5 := res5 and tmp;    
+
+                -- A4 - Allies in VR. No Enemies in VR.
+                    res4 := UBoolean(true, 0);
+                    for t in allies do
+                        dist := self.tank.distance(t);
+                        res4 := res4 or (dist <= self.tank.visionRadius and dist > self.tank.range);
+                    end;
+
+                    tmp := UBoolean(true, 1);
+                    for t in enemies do
+                        dist := self.tank.distance(t);
+                        tmp := tmp and (dist > self.tank.visionRadius);
+                    end;
+                    res4 := res4 and tmp and not(res5);                
+                    
+                -- A7 - Minority. Enemies in SR.
+                    res7 := let e = enemies ->
+                            select(t: Tank| (self.tank.distance(t) < self.tank.range).confidence >= self.tank.sp.truthThreshold) -> size() in
+                            let a = allies -> select(t: Tank | (self.tank.distance(t) < self.tank.visionRadius).confidence >= self.tank.sp.truthThreshold) -> size() in
+                            e >= (a+1) and a > 0 and e > 0;
+
+                -- A9 - Majority. Enemies in SR.
+                    res9 := let e  = enemies ->
+                            select(t: Tank|(self.tank.distance(t) < self.tank.range).confidence >= self.tank.sp.truthThreshold) -> size() in
+                            let a = allies ->
+                            select(t: Tank|(self.tank.distance(t) < self.tank.visionRadius).confidence >= self.tank.sp.truthThreshold) -> size() in
+                            e < (a+1) and e > 0 and a > 0;
+                
+                -- A8 - Majority. Enemies in VR.
+                    res8 := if (res9.confidence >= self.tank.sp.truthThreshold) then
+                                UBoolean(true, 0.0)
+                            else 
+                                let e = enemies ->
+                                select(t: Tank|(self.tank.distance(t) < self.tank.visionRadius).confidence >= self.tank.sp.truthThreshold) -> size() in
+                                let a = allies ->
+                                select(t: Tank|(self.tank.distance(t) < self.tank.visionRadius).confidence >= self.tank.sp.truthThreshold) -> size() in
+                                e < (a+1) and a > 0 and e > 0
+                            endif;
+
+                -- A6 - Minority. Enemies in VR.
+                    res6 := if (res7.confidence >= self.tank.sp.truthThreshold) then
+                                UBoolean(true, 0.0)
+                            else
+                                let e = enemies ->
+                                select(t: Tank|(self.tank.distance(t) < self.tank.visionRadius).confidence >= self.tank.sp.truthThreshold) -> size() in
+                                let a = allies ->
+                                select(t: Tank|(self.tank.distance(t) < self.tank.visionRadius).confidence >= self.tank.sp.truthThreshold) -> size() in
+                                e >= (a+1) and e > 0 and a > 0 and not(res9)
+                            endif;                           
+
+                result := Tuple{
+                    a1 = res1.confidence(),
+                    a2 = res2.confidence(),
+                    a3 = res3.confidence(),
+                    a4 = res4.confidence(),
+                    a5 = res5.confidence(),
+                    a6 = res6.confidence(),
+                    a7 = res7.confidence(),
+                    a8 = res8.confidence(),
+                    a9 = res9.confidence()
+                };
+
+                self.tank.situationalContext := result;
+            end
+
+        behaviourHighVulnerability(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real, a7: Real, a8: Real, a9: Real): Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real) =
+        Tuple{
+            shoot = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.highVulnerability.a1.shoot+
+                                        a2*self.sc.decisionTable.highVulnerability.a2.shoot+
+                                        a3*self.sc.decisionTable.highVulnerability.a3.shoot+
+                                        a4*self.sc.decisionTable.highVulnerability.a4.shoot+
+                                        a5*self.sc.decisionTable.highVulnerability.a5.shoot+
+                                        a6*self.sc.decisionTable.highVulnerability.a6.shoot+
+                                        a7*self.sc.decisionTable.highVulnerability.a7.shoot+
+                                        a8*self.sc.decisionTable.highVulnerability.a8.shoot+
+                                        a9*self.sc.decisionTable.highVulnerability.a9.shoot)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.highVulnerability.bold.shoot+
+                                cowardMood*self.mf.motivationTable.highVulnerability.coward.shoot),
+
+            escape = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.highVulnerability.a1.escape+
+                                        a2*self.sc.decisionTable.highVulnerability.a2.escape+
+                                        a3*self.sc.decisionTable.highVulnerability.a3.escape+
+                                        a4*self.sc.decisionTable.highVulnerability.a4.escape+
+                                        a5*self.sc.decisionTable.highVulnerability.a5.escape+
+                                        a6*self.sc.decisionTable.highVulnerability.a6.escape+
+                                        a7*self.sc.decisionTable.highVulnerability.a7.escape+
+                                        a8*self.sc.decisionTable.highVulnerability.a8.escape+
+                                        a9*self.sc.decisionTable.highVulnerability.a9.escape)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.highVulnerability.bold.escape+
+                                cowardMood*self.mf.motivationTable.highVulnerability.coward.escape),
+
+            joinAlly = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.highVulnerability.a1.joinAlly+
+                                        a2*self.sc.decisionTable.highVulnerability.a2.joinAlly+
+                                        a3*self.sc.decisionTable.highVulnerability.a3.joinAlly+
+                                        a4*self.sc.decisionTable.highVulnerability.a4.joinAlly+
+                                        a5*self.sc.decisionTable.highVulnerability.a5.joinAlly+
+                                        a6*self.sc.decisionTable.highVulnerability.a6.joinAlly+
+                                        a7*self.sc.decisionTable.highVulnerability.a7.joinAlly+
+                                        a8*self.sc.decisionTable.highVulnerability.a8.joinAlly+
+                                        a9*self.sc.decisionTable.highVulnerability.a9.joinAlly)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.highVulnerability.bold.joinAlly+
+                                cowardMood*self.mf.motivationTable.highVulnerability.coward.joinAlly),
+
+            chaseEnemy = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.highVulnerability.a1.chaseEnemy+
+                                        a2*self.sc.decisionTable.highVulnerability.a2.chaseEnemy+
+                                        a3*self.sc.decisionTable.highVulnerability.a3.chaseEnemy+
+                                        a4*self.sc.decisionTable.highVulnerability.a4.chaseEnemy+
+                                        a5*self.sc.decisionTable.highVulnerability.a5.chaseEnemy+
+                                        a6*self.sc.decisionTable.highVulnerability.a6.chaseEnemy+
+                                        a7*self.sc.decisionTable.highVulnerability.a7.chaseEnemy+
+                                        a8*self.sc.decisionTable.highVulnerability.a8.chaseEnemy+
+                                        a9*self.sc.decisionTable.highVulnerability.a9.chaseEnemy)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.highVulnerability.bold.chaseEnemy+
+                                cowardMood*self.mf.motivationTable.highVulnerability.coward.chaseEnemy),
+
+            stop = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.highVulnerability.a1.stop+
+                                        a2*self.sc.decisionTable.highVulnerability.a2.stop+
+                                        a3*self.sc.decisionTable.highVulnerability.a3.stop+
+                                        a4*self.sc.decisionTable.highVulnerability.a4.stop+
+                                        a5*self.sc.decisionTable.highVulnerability.a5.stop+
+                                        a6*self.sc.decisionTable.highVulnerability.a6.stop+
+                                        a7*self.sc.decisionTable.highVulnerability.a7.stop+
+                                        a8*self.sc.decisionTable.highVulnerability.a8.stop+
+                                        a9*self.sc.decisionTable.highVulnerability.a9.stop)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.highVulnerability.bold.stop+
+                                cowardMood*self.mf.motivationTable.highVulnerability.coward.stop)
+                                }
+
+        behaviourLowVulnerability(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real, a7: Real, a8: Real, a9: Real): Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real) =
+        Tuple{
+            shoot = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.lowVulnerability.a1.shoot+
+                                        a2*self.sc.decisionTable.lowVulnerability.a2.shoot+
+                                        a3*self.sc.decisionTable.lowVulnerability.a3.shoot+
+                                        a4*self.sc.decisionTable.lowVulnerability.a4.shoot+
+                                        a5*self.sc.decisionTable.lowVulnerability.a5.shoot+
+                                        a6*self.sc.decisionTable.lowVulnerability.a6.shoot+
+                                        a7*self.sc.decisionTable.lowVulnerability.a7.shoot+
+                                        a8*self.sc.decisionTable.lowVulnerability.a8.shoot+
+                                        a9*self.sc.decisionTable.lowVulnerability.a9.shoot)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.lowVulnerability.bold.shoot+
+                                cowardMood*self.mf.motivationTable.lowVulnerability.coward.shoot),
+
+            escape = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.lowVulnerability.a1.escape+
+                                        a2*self.sc.decisionTable.lowVulnerability.a2.escape+
+                                        a3*self.sc.decisionTable.lowVulnerability.a3.escape+
+                                        a4*self.sc.decisionTable.lowVulnerability.a4.escape+
+                                        a5*self.sc.decisionTable.lowVulnerability.a5.escape+
+                                        a6*self.sc.decisionTable.lowVulnerability.a6.escape+
+                                        a7*self.sc.decisionTable.lowVulnerability.a7.escape+
+                                        a8*self.sc.decisionTable.lowVulnerability.a8.escape+
+                                        a9*self.sc.decisionTable.lowVulnerability.a9.escape)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.lowVulnerability.bold.escape+
+                                cowardMood*self.mf.motivationTable.lowVulnerability.coward.escape),
+
+            joinAlly = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.lowVulnerability.a1.joinAlly+
+                                        a2*self.sc.decisionTable.lowVulnerability.a2.joinAlly+
+                                        a3*self.sc.decisionTable.lowVulnerability.a3.joinAlly+
+                                        a4*self.sc.decisionTable.lowVulnerability.a4.joinAlly+
+                                        a5*self.sc.decisionTable.lowVulnerability.a5.joinAlly+
+                                        a6*self.sc.decisionTable.lowVulnerability.a6.joinAlly+
+                                        a7*self.sc.decisionTable.lowVulnerability.a7.joinAlly+
+                                        a8*self.sc.decisionTable.lowVulnerability.a8.joinAlly+
+                                        a9*self.sc.decisionTable.lowVulnerability.a9.joinAlly)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.lowVulnerability.bold.joinAlly+
+                                cowardMood*self.mf.motivationTable.lowVulnerability.coward.joinAlly),
+
+            chaseEnemy = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.lowVulnerability.a1.chaseEnemy+
+                                        a2*self.sc.decisionTable.lowVulnerability.a2.chaseEnemy+
+                                        a3*self.sc.decisionTable.lowVulnerability.a3.chaseEnemy+
+                                        a4*self.sc.decisionTable.lowVulnerability.a4.chaseEnemy+
+                                        a5*self.sc.decisionTable.lowVulnerability.a5.chaseEnemy+
+                                        a6*self.sc.decisionTable.lowVulnerability.a6.chaseEnemy+
+                                        a7*self.sc.decisionTable.lowVulnerability.a7.chaseEnemy+
+                                        a8*self.sc.decisionTable.lowVulnerability.a8.chaseEnemy+
+                                        a9*self.sc.decisionTable.lowVulnerability.a9.chaseEnemy)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.lowVulnerability.bold.chaseEnemy+
+                                cowardMood*self.mf.motivationTable.lowVulnerability.coward.chaseEnemy),
+
+            stop = situationalContextWeight*(
+                                        a1*self.sc.decisionTable.lowVulnerability.a1.stop+
+                                        a2*self.sc.decisionTable.lowVulnerability.a2.stop+
+                                        a3*self.sc.decisionTable.lowVulnerability.a3.stop+
+                                        a4*self.sc.decisionTable.lowVulnerability.a4.stop+
+                                        a5*self.sc.decisionTable.lowVulnerability.a5.stop+
+                                        a6*self.sc.decisionTable.lowVulnerability.a6.stop+
+                                        a7*self.sc.decisionTable.lowVulnerability.a7.stop+
+                                        a8*self.sc.decisionTable.lowVulnerability.a8.stop+
+                                        a9*self.sc.decisionTable.lowVulnerability.a9.stop)+
+                    motivationalForceWeight*(boldMood*self.mf.motivationTable.lowVulnerability.bold.stop+
+                                cowardMood*self.mf.motivationTable.lowVulnerability.coward.stop)
+            }
+    end
+
+class SituationalContextTables
+    attributes
+        decisionTable: Tuple(
+            lowVulnerability: Tuple(
+                    a1: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a2: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a3: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a4: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a5: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a6: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a7: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a8: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a9: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real)),
+            highVulnerability: Tuple(
+                    a1: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a2: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a3: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a4: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a5: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a6: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a7: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a8: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                    a9: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real))
+        )
+    end
+
+class MotivationalForceTables
+    attributes
+        motivationTable : Tuple(
+            lowVulnerability: Tuple(
+                        bold: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                        coward: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real)),
+            highVulnerability: Tuple(
+                        bold: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real),
+                        coward: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real)))
+    end
+
+abstract class ActiveObject
+    operations
+        action() begin end
+    end
+
+class Clock
+    attributes
+        now : Real                  init: 0.0
+        betweenTickLapse : Real     init: 0.2
+    operations
+        tick()
+            begin
+                self.now := self.now + self.betweenTickLapse;
+                for o in self.object -> select(p: ActiveObject|p.oclIsKindOf(Observer)) do
+                    o.action();
+                end;
+                for o in self.object -> reject(p: ActiveObject|p.oclIsKindOf(Observer)) do
+                    o.action();
+                end;
+            end
+        
+        run(n: Integer)
+            begin
+                for i in Sequence{1..n} do self.tick() end
+            end
+    end
+
+class SimulationParameters
+    attributes
+        precision : Real               init: 0.001
+        truthThreshold : Real           init: 0.9
+    end
+
+class TraceStorage
+    attributes
+        element : Sequence(Tuple(
+                        time: Real,
+                        x: UReal,
+                        y: UReal,
+                        speed: UReal,
+                        health: UReal,
+                        ammo: Real,
+                        power: UReal,
+                        closestAlly: Integer,
+                        closestEnemy: Integer,
+                        team: Integer, 
+                        sitContext: Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real, a7: Real, a8: Real, a9: Real),
+                        action: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real))) init : Sequence{}
+    operations
+        initialize(tm: TraceStorageMaster)
+            begin
+                insert(tm, self) into CollectTraces;
+            end
+        record(t: Real, xa: UReal, ya: UReal, spa: UReal, ha: UReal, amm: Real, pa: UReal, clA: Integer, clE: Integer, ta: Integer, 
+            sC: Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real, a7: Real, a8: Real, a9: Real),
+            a: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real))
+            begin
+                self.element := self.element -> append(Tuple{
+                    time = t,
+                    x = xa,
+                    y = ya,
+                    speed = spa,
+                    health = ha,
+                    ammo = amm,
+                    power = pa,
+                    closestAlly = clA,
+                    closestEnemy = clE,
+                    team = ta,
+                    sitContext = sC,
+                    action = a
+                })
+            end
+        print() : Sequence(Tuple(
+                        time: Real,
+                        x: UReal,
+                        y: UReal,
+                        speed: UReal,
+                        health: UReal,
+                        ammo: Real,
+                        power: UReal,
+                        closestAlly: Integer,
+                        closestEnemy: Integer,
+                        team: Integer, 
+                        sitContext: Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real, a7: Real, a8: Real, a9: Real),
+                        action: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real))) = self.element
+    end
+
+class TraceStorageMaster
+    attributes
+        elements : Sequence(Tuple(name: Integer,
+                    seq: Sequence(Tuple(
+                        time: Real,
+                        x: UReal,
+                        y: UReal,
+                        speed: UReal,
+                        health: UReal,
+                        ammo: Real,
+                        power: UReal,
+                        closestAlly: Integer,
+                        closestEnemy: Integer,
+                        team: Integer, 
+                        sitContext: Tuple(a1: Real, a2: Real, a3: Real, a4: Real, a5: Real, a6: Real, a7: Real, a8: Real, a9: Real),
+                        action: Tuple(shoot: Real,escape: Real,joinAlly: Real,chaseEnemy: Real,stop: Real))))) init: Sequence{}
+        
+    operations
+        recordAll()
+            begin
+                self.elements := Sequence{};
+                for trace in self.ts do
+                    self.elements := self.elements -> append(Tuple{
+                        name = trace.tank.name,
+                        seq = trace.element
+                    });
+                end;
+            end
+        record(trace: TraceStorage)
+            begin
+                self.elements := self.elements -> append(Tuple{
+                    name = trace.tank.name,
+                    seq = trace.element
+                });
+            end
+    end
+
+abstract class Observer < ActiveObject end
+class SimulationObserver < Observer
+    attributes
+        maxTanks : Integer        init: 1000
+    operations
+        initialize(tm : TraceStorageMaster, c : Clock, sp : SimulationParameters, nTanksPerTeam : Integer)
+            begin
+                declare f : TankFactory;
+                f := new TankFactory;
+                f.initialize(tm, c, sp);
+                insert(self, f) into FactoryObservation;
+                insert(c, self) into Timing;
+                for i in Sequence{1..nTanksPerTeam} do
+                    self.tf.createTank(0);
+                end;
+                for i in Sequence{1..nTanksPerTeam} do
+                    self.tf.createTank(1);
+                end;
+            end
+        action()
+            begin
+                declare tankTeam : Integer;
+                for t in Tank.allInstances -> select(t: Tank|t.destroyed) do
+                    tankTeam := t.team;
+                    destroy(t.behaviour.sc);
+                    destroy(t.behaviour.mf);
+                    destroy(t.behaviour);
+                    t.trace.master.record(t.trace);
+                    destroy(t.trace);
+                    destroy(t);
+                    --WriteLine('Destroyed tank');
+                    if self.tf.tankNames < self.maxTanks then
+                        self.tf.createTank(tankTeam);
+                    end;
+                end;
+            end
+        endSimulation() : Boolean = (self.tf.tankNames >= self.maxTanks-1) and Tank.allInstances -> isEmpty()
+    end
+
+class Test
+    operations
+        runSimulation(nSim : Integer, nTanksPerTeam : Integer)
+            begin
+                declare tm : TraceStorageMaster, c : Clock, sp : SimulationParameters, so: SimulationObserver;
+                tm := new TraceStorageMaster;
+                c := new Clock;
+                sp := new SimulationParameters;
+                so := new SimulationObserver;
+                so.initialize(tm, c, sp, nTanksPerTeam);
+                so.maxTanks := nSim;
+                while not(so.endSimulation()) do c.run(100) end;
+            end
+    end
+
+association FactoryObservation between
+    SimulationObserver [1] role so
+    TankFactory [1] role tf
+end
+
+association CollectTraces between
+    TraceStorageMaster [1] role master
+    TraceStorage [*] role ts
+end
+
+association ClockFactory between
+    Clock [1] role c
+    TankFactory [1] role factory
+end
+
+association TraceFactory between
+    TraceStorageMaster [1] role tm
+    TankFactory [1] role factory
+end
+
+association SimulationFactory between
+    SimulationParameters [1] role sp
+    TankFactory [1] role factory
+end
+
+association Movements between
+    Tank [1] role tank
+    TraceStorage [1] role trace
+end
+
+association Timing between
+    Clock [1] role clock
+    ActiveObject [*] role object ordered
+end
+
+association TankSimulationParams between
+    Tank [*] role t
+    SimulationParameters [1] role sp
+end
+
+association MotForceTable between
+    MotivationalForceTables [1] role mf
+    Behaviour [1] role behav
+end
+
+association SitContextTable between
+    SituationalContextTables [1] role sc
+    Behaviour [1] role behav
+end
+
+aggregation TankBehaviour between
+    Tank [0..1] role tank
+    Behaviour [1] role behaviour
+end
